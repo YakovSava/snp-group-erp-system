@@ -1,0 +1,346 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: snp-esb 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-01 00:00+0000\n"
+"PO-Revision-Date: 2026-10-01 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Посты и SMM"
+msgstr "Posts & SMM"
+
+msgid "Утилиты"
+msgstr "Utilities"
+
+msgid "Скоро"
+msgstr "Coming soon"
+
+msgid "Агент и помощь"
+msgstr "Agent & Help"
+
+msgid "В разработке"
+msgstr "In development"
+
+msgid "Безопасность"
+msgstr "Security"
+
+msgid "Выйти"
+msgstr "Log out"
+
+msgid "Фото"
+msgstr "Photo"
+
+msgid "Видео"
+msgstr "Video"
+
+msgid "Файлы"
+msgstr "Files"
+
+msgid "История"
+msgstr "History"
+
+msgid "Файл"
+msgstr "File"
+
+msgid "Формат"
+msgstr "Format"
+
+msgid "В"
+msgstr "To"
+
+msgid "Статус"
+msgstr "Status"
+
+msgid "Результат"
+msgstr "Result"
+
+msgid "Скачать"
+msgstr "Download"
+
+msgid "Задач пока нет."
+msgstr "No jobs yet."
+
+msgid "Главная"
+msgstr "Home"
+
+msgid "Внимание: это внутренняя ERP-система компании. Она не предназначена для внешнего использования и не индексируется поисковыми системами."
+msgstr "Notice: this is the company's internal ERP system. It is not intended for external use and is not indexed by search engines."
+
+msgid "Ядро ESB — управление постами, SMM и утилитами конвертации файлов."
+msgstr "ESB core — managing posts, SMM and file conversion utilities."
+
+msgid "Конвертация видео"
+msgstr "Video conversion"
+
+msgid "До 100 МБ. Поддерживаются: MP4, MOV, MKV, AVI, WEBM → MP4, WEBM."
+msgstr "Up to 100 MB. Supported: MP4, MOV, MKV, AVI, WEBM → MP4, WEBM."
+
+msgid "Конвертировать"
+msgstr "Convert"
+
+msgid "Последние задачи"
+msgstr "Recent jobs"
+
+msgid "Пользователь"
+msgstr "User"
+
+msgid "Что сделал"
+msgstr "What was done"
+
+msgid "Когда"
+msgstr "When"
+
+msgid "Записей пока нет."
+msgstr "No entries yet."
+
+msgid "Конвертация фото"
+msgstr "Photo conversion"
+
+msgid "До 50 МБ. Поддерживаются: JPG, PNG, TIFF, BMP, GIF, WEBP, HEIC/HEIF, ICO, SVG, PSD → PNG, JPG, WEBP."
+msgstr "Up to 50 MB. Supported: JPG, PNG, TIFF, BMP, GIF, WEBP, HEIC/HEIF, ICO, SVG, PSD → PNG, JPG, WEBP."
+
+msgid "Пост"
+msgstr "Post"
+
+msgid "Отправлять в list.am/avito?"
+msgstr "Send to list.am/avito?"
+
+msgid "Да"
+msgstr "Yes"
+
+msgid "Нет"
+msgstr "No"
+
+msgid "Приложения"
+msgstr "Attachments"
+
+msgid "Связанные посты в сетях продажи"
+msgstr "Related marketplace posts"
+
+msgid "Вход в систему"
+msgstr "Sign in"
+
+msgid "Неверный логин или пароль."
+msgstr "Invalid username or password."
+
+msgid "Логин"
+msgstr "Username"
+
+msgid "Пароль"
+msgstr "Password"
+
+msgid "Войти"
+msgstr "Sign in"
+
+msgid "или"
+msgstr "or"
+
+msgid "Войти по PassKey"
+msgstr "Sign in with PassKey"
+
+msgid "Не удалось войти по PassKey."
+msgstr "Could not sign in with PassKey."
+
+msgid "Цена"
+msgstr "Price"
+
+msgid "Создан автоматически из поста"
+msgstr "Auto-created from post"
+
+msgid "Новый пост"
+msgstr "New post"
+
+msgid "Внутренний комментарий не отправляется в пост, используется только внутри компании."
+msgstr "The internal comment is not sent with the post, it is for internal use only."
+
+msgid "Создать"
+msgstr "Create"
+
+msgid "Конвертация файлов"
+msgstr "File conversion"
+
+msgid "До 300 МБ. Поддерживаются: DOC/DOCX, RTF, XLS/XLSX, ODT, TXT, CSV, ODS, PPT/PPTX, ODP, PDF → DOCX, XLSX, TXT, CSV, PPTX, PDF."
+msgstr "Up to 300 MB. Supported: DOC/DOCX, RTF, XLS/XLSX, ODT, TXT, CSV, ODS, PPT/PPTX, ODP, PDF → DOCX, XLSX, TXT, CSV, PPTX, PDF."
+
+msgid "Вход"
+msgstr "Sign in"
+
+msgid "Посты в соцсетях"
+msgstr "Social media posts"
+
+msgid "Посты в сетях продажи"
+msgstr "Marketplace posts"
+
+msgid "Текст"
+msgstr "Text"
+
+msgid "list.am/avito"
+msgstr "list.am/avito"
+
+msgid "Автор"
+msgstr "Author"
+
+msgid "Создан"
+msgstr "Created"
+
+msgid "Постов пока нет."
+msgstr "No posts yet."
+
+msgid "Новый пост в сетях продажи"
+msgstr "New marketplace post"
+
+msgid "Заголовок"
+msgstr "Title"
+
+msgid "Цена (AMD)"
+msgstr "Price (AMD)"
+
+msgid "Автоматически"
+msgstr "Automatic"
+
+msgid "Устройство"
+msgstr "Device"
+
+msgid "Добавлен"
+msgstr "Added"
+
+msgid "Последнее использование"
+msgstr "Last used"
+
+msgid "Удалить"
+msgstr "Delete"
+
+msgid "PassKey ещё не добавлены."
+msgstr "No PassKeys added yet."
+
+msgid "Название устройства (необязательно)"
+msgstr "Device name (optional)"
+
+msgid "Добавить PassKey"
+msgstr "Add PassKey"
+
+msgid "Не удалось добавить PassKey."
+msgstr "Could not add PassKey."
+
+msgid "Вход по паролю всегда доступен. PassKey — это дополнительный, более удобный способ входа с этого устройства."
+msgstr "Password sign-in is always available. PassKey is an additional, more convenient way to sign in from this device."
+
+msgid "Основной текст"
+msgstr "Main text"
+
+msgid "Текст для Instagram"
+msgstr "Instagram text"
+
+msgid "Текст для Telegram"
+msgstr "Telegram text"
+
+msgid "Текст для Facebook"
+msgstr "Facebook text"
+
+msgid "Общий текст для соц.сетей"
+msgstr "Common social media text"
+
+msgid "Внутренний комментарий"
+msgstr "Internal comment"
+
+msgid "Не отправляется в пост, только для внутреннего использования."
+msgstr "Not sent with the post, for internal use only."
+
+msgid "Обновлён"
+msgstr "Updated"
+
+msgid "Посты"
+msgstr "Posts"
+
+msgid "Вложение поста"
+msgstr "Post attachment"
+
+msgid "Вложения поста"
+msgstr "Post attachments"
+
+msgid "Исходный пост"
+msgstr "Source post"
+
+msgid "Создан автоматически"
+msgstr "Auto-created"
+
+msgid "Пост в сетях продажи"
+msgstr "Marketplace post"
+
+msgid "Файл (JPEG)"
+msgstr "File (JPEG)"
+
+msgid "Вложение (продажа)"
+msgstr "Attachment (marketplace)"
+
+msgid "Вложения (продажа)"
+msgstr "Attachments (marketplace)"
+
+msgid "PNG, JPEG, AVIF, GIF, MP4, MOV."
+msgstr "PNG, JPEG, AVIF, GIF, MP4, MOV."
+
+msgid "Приложения (только JPG)"
+msgstr "Attachments (JPG only)"
+
+msgid "Цена (драм)"
+msgstr "Price (dram)"
+
+msgid "В очереди"
+msgstr "Queued"
+
+msgid "Обрабатывается"
+msgstr "Processing"
+
+msgid "Готово"
+msgstr "Done"
+
+msgid "Ошибка"
+msgstr "Error"
+
+msgid "Задача конвертации"
+msgstr "Conversion job"
+
+msgid "Задачи конвертации"
+msgstr "Conversion jobs"
+
+msgid "Конвертировать в"
+msgstr "Convert to"
+
+msgid "Файл слишком большой (максимум %(limit)s МБ)."
+msgstr "File is too large (maximum %(limit)s MB)."
+
+msgid "Регистрация устарела, попробуйте снова."
+msgstr "Registration expired, please try again."
+
+msgid "Вход устарел, попробуйте снова."
+msgstr "Sign-in expired, please try again."
+
+msgid "Некорректный ответ устройства."
+msgstr "Invalid device response."
+
+msgid "PassKey не зарегистрирован."
+msgstr "PassKey is not registered."
+
+msgid "Пост создан."
+msgstr "Post created."
+
+msgid "Пост в сетях продажи создан."
+msgstr "Marketplace post created."
+
+msgid "Недопустимый тип файла (%(mime)s). Разрешены: PNG, JPEG, AVIF, GIF, MP4, MOV."
+msgstr "Invalid file type (%(mime)s). Allowed: PNG, JPEG, AVIF, GIF, MP4, MOV."
+
+msgid "Недопустимый тип файла (%(mime)s). Разрешён только JPEG."
+msgstr "Invalid file type (%(mime)s). Only JPEG is allowed."
+
+msgid "Назад"
+msgstr "Previous"
+
+msgid "Далее"
+msgstr "Next"

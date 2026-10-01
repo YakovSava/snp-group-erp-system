@@ -1,0 +1,7 @@
+{% load i18n %}
+<nav class="subdockbar">
+    <a href="{% url 'utilities:photo' %}" class="subdockbar__item{% if active == 'photo' %} subdockbar__item--active{% endif %}">{% trans "Фото" %}</a>
+    <a href="{% url 'utilities:video' %}" class="subdockbar__item{% if active == 'video' %} subdockbar__item--active{% endif %}">{% trans "Видео" %}</a>
+    <a href="{% url 'utilities:files' %}" class="subdockbar__item{% if active == 'files' %} subdockbar__item--active{% endif %}">{% trans "Файлы" %}</a>
+    <a href="{% url 'utilities:history' %}" class="subdockbar__item{% if active == 'history' %} subdockbar__item--active{% endif %}">{% trans "История" %}</a>
+</nav>

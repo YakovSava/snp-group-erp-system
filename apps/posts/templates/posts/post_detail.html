@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Пост" %} #{{ post.pk }}{% endblock %}
+
+{% block content %}
+{% include "posts/_subnav.html" with active="posts" %}
+
+<div class="card" style="margin-top:16px;">
+    <h1>{% trans "Пост" %} #{{ post.pk }}</h1>
+    <p>{{ post.text|linebreaks }}</p>
+
+    <p>
+        <strong>{% trans "Отправлять в list.am/avito?" %}</strong>
+        {% if post.send_to_marketplace %}{% trans "Да" %}{% else %}{% trans "Нет" %}{% endif %}
+    </p>
+
+    {% if post.attachments.all %}
+    <h3>{% trans "Приложения" %}</h3>
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        {% for attachment in post.attachments.all %}
+            <a href="{{ attachment.file.url }}" target="_blank">{{ attachment.file.name }}</a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if post.sales_posts.all %}
+    <h3>{% trans "Связанные посты в сетях продажи" %}</h3>
+    <ul>
+        {% for sales_post in post.sales_posts.all %}
+            <li><a href="{% url 'posts:salespost_detail' sales_post.pk %}">{{ sales_post.title }}</a></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+{% endblock %}

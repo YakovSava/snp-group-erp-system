@@ -1,0 +1,33 @@
+{% load i18n %}
+<table data-jobs-table>
+    <thead>
+        <tr>
+            <th>{% trans "Файл" %}</th>
+            <th>{% trans "Формат" %}</th>
+            <th>{% trans "В" %}</th>
+            <th>{% trans "Статус" %}</th>
+            <th>{% trans "Результат" %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for job in jobs %}
+        <tr data-job-row data-job-id="{{ job.pk }}" data-job-url="{% url 'conversion-job-detail' job.pk %}">
+            <td>{{ job.source_filename }}</td>
+            <td data-job-source>{{ job.detected_source_format|default:"…" }}</td>
+            <td>{{ job.target_format }}</td>
+            <td><span class="badge badge--{{ job.status }}" data-job-status>{{ job.get_status_display }}</span></td>
+            <td data-job-result>
+                {% if job.status == "done" and job.result_file %}
+                    <a href="{{ job.result_file.url }}" class="button">{% trans "Скачать" %}</a>
+                {% elif job.status == "failed" %}
+                    <span class="help-text">{{ job.error_message }}</span>
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">{% trans "Задач пока нет." %}</td></tr>
+        {% endfor %}
+    </tbody>
+</table>

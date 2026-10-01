@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ sales_post.title }}{% endblock %}
+
+{% block content %}
+{% include "posts/_subnav.html" with active="sales" %}
+
+<div class="card" style="margin-top:16px;">
+    <h1>{{ sales_post.title }}</h1>
+    <p><strong>{% trans "Цена" %}:</strong> {{ sales_post.price_amd }} AMD</p>
+    <p>{{ sales_post.text|linebreaks }}</p>
+
+    {% if sales_post.source_post %}
+    <p class="help-text">{% trans "Создан автоматически из поста" %} #{{ sales_post.source_post.pk }}</p>
+    {% endif %}
+
+    {% if sales_post.attachments.all %}
+    <h3>{% trans "Приложения" %}</h3>
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        {% for attachment in sales_post.attachments.all %}
+            <img src="{{ attachment.file.url }}" alt="" style="max-width:160px; border-radius:8px;">
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

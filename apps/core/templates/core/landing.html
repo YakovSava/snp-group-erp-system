@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Главная" %}{% endblock %}
+
+{% block content %}
+<div class="erp-warning">
+    {% blocktrans %}Внимание: это внутренняя ERP-система компании. Она не предназначена для внешнего использования и не индексируется поисковыми системами.{% endblocktrans %}
+</div>
+
+<section class="landing-hero">
+    <h1>{{ COMPANY_NAME }} <span class="landing-hero__tagline">{{ COMPANY_TAGLINE }}</span></h1>
+    <p>{% trans "Ядро ESB — управление постами, SMM и утилитами конвертации файлов." %}</p>
+
+    <div class="landing-hero__links">
+        <a class="button button--primary" href="{% url 'posts:post_list' %}">{% trans "Посты и SMM" %}</a>
+        <a class="button" href="{% url 'utilities:photo' %}">{% trans "Утилиты" %}</a>
+    </div>
+</section>
+{% endblock %}

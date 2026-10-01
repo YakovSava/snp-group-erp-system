@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Новый пост в сетях продажи" %}{% endblock %}
+
+{% block content %}
+{% include "posts/_subnav.html" with active="sales" %}
+
+<div class="card" style="margin-top:16px; max-width:640px;">
+    <h1>{% trans "Новый пост в сетях продажи" %}</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="button button--primary">{% trans "Создать" %}</button>
+    </form>
+</div>
+{% endblock %}

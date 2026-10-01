@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{% trans "Конвертация файлов" %}{% endblock %}
+
+{% block content %}
+{% include "utilities/_subnav.html" with active="files" %}
+
+<div class="card" style="margin-top:16px; max-width:640px;">
+    <h1>{% trans "Конвертация файлов" %}</h1>
+    <p class="help-text">{% trans "До 300 МБ. Поддерживаются: DOC/DOCX, RTF, XLS/XLSX, ODT, TXT, CSV, ODS, PPT/PPTX, ODP, PDF → DOCX, XLSX, TXT, CSV, PPTX, PDF." %}</p>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="button button--primary">{% trans "Конвертировать" %}</button>
+    </form>
+</div>
+
+<div class="card">
+    <h2>{% trans "Последние задачи" %}</h2>
+    {% include "utilities/_jobs_table.html" %}
+</div>
+{% endblock %}
+
+{% block extra_head %}
+<script src="{% static 'js/conversion.js' %}" defer></script>
+{% endblock %}

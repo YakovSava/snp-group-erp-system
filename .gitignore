@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.sqlite3
+/static_root/
+/media/
+.env
+*.log
+.DS_Store
+/venv/
+/.venv/
+*.mo
+/static/images/favicon.ico

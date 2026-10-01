@@ -1,0 +1,346 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: snp-esb 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-01 00:00+0000\n"
+"PO-Revision-Date: 2026-10-01 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: hy\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Посты и SMM"
+msgstr "Փոստեր և SMM"
+
+msgid "Утилиты"
+msgstr "Օգտակար գործիքներ"
+
+msgid "Скоро"
+msgstr "Շուտով"
+
+msgid "Агент и помощь"
+msgstr "Գործակալ և օգնություն"
+
+msgid "В разработке"
+msgstr "Մշակման փուլում"
+
+msgid "Безопасность"
+msgstr "Անվտանգություն"
+
+msgid "Выйти"
+msgstr "Ելք"
+
+msgid "Фото"
+msgstr "Լուսանկար"
+
+msgid "Видео"
+msgstr "Տեսանյութ"
+
+msgid "Файлы"
+msgstr "Ֆայլեր"
+
+msgid "История"
+msgstr "Պատմություն"
+
+msgid "Файл"
+msgstr "Ֆայլ"
+
+msgid "Формат"
+msgstr "Ձևաչափ"
+
+msgid "В"
+msgstr "Նոր"
+
+msgid "Статус"
+msgstr "Կարգավիճակ"
+
+msgid "Результат"
+msgstr "Արդյունք"
+
+msgid "Скачать"
+msgstr "Ներբեռնել"
+
+msgid "Задач пока нет."
+msgstr "Առայժմ առաջադրանքներ չկան։"
+
+msgid "Главная"
+msgstr "Գլխավոր"
+
+msgid "Внимание: это внутренняя ERP-система компании. Она не предназначена для внешнего использования и не индексируется поисковыми системами."
+msgstr "Ուշադրություն՝ սա ընկերության ներքին ERP համակարգն է։ Այն նախատեսված չէ արտաքին օգտագործման համար և չի ինդեքսավորվում որոնողական համակարգերի կողմից։"
+
+msgid "Ядро ESB — управление постами, SMM и утилитами конвертации файлов."
+msgstr "ESB միջուկ՝ փոստերի, SMM-ի և ֆայլերի փոխարկման գործիքների կառավարում։"
+
+msgid "Конвертация видео"
+msgstr "Տեսանյութի փոխարկում"
+
+msgid "До 100 МБ. Поддерживаются: MP4, MOV, MKV, AVI, WEBM → MP4, WEBM."
+msgstr "Մինչև 100 ՄԲ։ Աջակցվում են՝ MP4, MOV, MKV, AVI, WEBM → MP4, WEBM։"
+
+msgid "Конвертировать"
+msgstr "Փոխարկել"
+
+msgid "Последние задачи"
+msgstr "Վերջին առաջադրանքները"
+
+msgid "Пользователь"
+msgstr "Օգտատեր"
+
+msgid "Что сделал"
+msgstr "Ինչ է արել"
+
+msgid "Когда"
+msgstr "Երբ"
+
+msgid "Записей пока нет."
+msgstr "Առայժմ գրառումներ չկան։"
+
+msgid "Конвертация фото"
+msgstr "Լուսանկարի փոխարկում"
+
+msgid "До 50 МБ. Поддерживаются: JPG, PNG, TIFF, BMP, GIF, WEBP, HEIC/HEIF, ICO, SVG, PSD → PNG, JPG, WEBP."
+msgstr "Մինչև 50 ՄԲ։ Աջակցվում են՝ JPG, PNG, TIFF, BMP, GIF, WEBP, HEIC/HEIF, ICO, SVG, PSD → PNG, JPG, WEBP։"
+
+msgid "Пост"
+msgstr "Փոստ"
+
+msgid "Отправлять в list.am/avito?"
+msgstr "Ուղարկե՞լ list.am/avito։"
+
+msgid "Да"
+msgstr "Այո"
+
+msgid "Нет"
+msgstr "Ոչ"
+
+msgid "Приложения"
+msgstr "Կցորդներ"
+
+msgid "Связанные посты в сетях продажи"
+msgstr "Կապակցված վաճառքի փոստեր"
+
+msgid "Вход в систему"
+msgstr "Մուտք համակարգ"
+
+msgid "Неверный логин или пароль."
+msgstr "Սխալ մուտքանուն կամ գաղտնաբառ։"
+
+msgid "Логин"
+msgstr "Մուտքանուն"
+
+msgid "Пароль"
+msgstr "Գաղտնաբառ"
+
+msgid "Войти"
+msgstr "Մուտք"
+
+msgid "или"
+msgstr "կամ"
+
+msgid "Войти по PassKey"
+msgstr "Մուտք գործել PassKey-ով"
+
+msgid "Не удалось войти по PassKey."
+msgstr "Չհաջողվեց մուտք գործել PassKey-ով։"
+
+msgid "Цена"
+msgstr "Գին"
+
+msgid "Создан автоматически из поста"
+msgstr "Ավտոմատ ստեղծվել է փոստից"
+
+msgid "Новый пост"
+msgstr "Նոր փոստ"
+
+msgid "Внутренний комментарий не отправляется в пост, используется только внутри компании."
+msgstr "Ներքին մեկնաբանությունը չի ուղարկվում փոստի հետ, օգտագործվում է միայն ընկերության ներսում։"
+
+msgid "Создать"
+msgstr "Ստեղծել"
+
+msgid "Конвертация файлов"
+msgstr "Ֆայլերի փոխարկում"
+
+msgid "До 300 МБ. Поддерживаются: DOC/DOCX, RTF, XLS/XLSX, ODT, TXT, CSV, ODS, PPT/PPTX, ODP, PDF → DOCX, XLSX, TXT, CSV, PPTX, PDF."
+msgstr "Մինչև 300 ՄԲ։ Աջակցվում են՝ DOC/DOCX, RTF, XLS/XLSX, ODT, TXT, CSV, ODS, PPT/PPTX, ODP, PDF → DOCX, XLSX, TXT, CSV, PPTX, PDF։"
+
+msgid "Вход"
+msgstr "Մուտք"
+
+msgid "Посты в соцсетях"
+msgstr "Փոստեր սոց. ցանցերում"
+
+msgid "Посты в сетях продажи"
+msgstr "Վաճառքի փոստեր"
+
+msgid "Текст"
+msgstr "Տեքստ"
+
+msgid "list.am/avito"
+msgstr "list.am/avito"
+
+msgid "Автор"
+msgstr "Հեղինակ"
+
+msgid "Создан"
+msgstr "Ստեղծվել է"
+
+msgid "Постов пока нет."
+msgstr "Առայժմ փոստեր չկան։"
+
+msgid "Новый пост в сетях продажи"
+msgstr "Նոր վաճառքի փոստ"
+
+msgid "Заголовок"
+msgstr "Վերնագիր"
+
+msgid "Цена (AMD)"
+msgstr "Գին (AMD)"
+
+msgid "Автоматически"
+msgstr "Ավտոմատ"
+
+msgid "Устройство"
+msgstr "Սարք"
+
+msgid "Добавлен"
+msgstr "Ավելացվել է"
+
+msgid "Последнее использование"
+msgstr "Վերջին օգտագործումը"
+
+msgid "Удалить"
+msgstr "Ջնջել"
+
+msgid "PassKey ещё не добавлены."
+msgstr "PassKey-ներ դեռ ավելացված չեն։"
+
+msgid "Название устройства (необязательно)"
+msgstr "Սարքի անվանումը (ըստ ցանկության)"
+
+msgid "Добавить PassKey"
+msgstr "Ավելացնել PassKey"
+
+msgid "Не удалось добавить PassKey."
+msgstr "Չհաջողվեց ավելացնել PassKey։"
+
+msgid "Вход по паролю всегда доступен. PassKey — это дополнительный, более удобный способ входа с этого устройства."
+msgstr "Գաղտնաբառով մուտքը միշտ հասանելի է։ PassKey-ն լրացուցիչ, ավելի հարմար եղանակ է այս սարքից մուտք գործելու համար։"
+
+msgid "Основной текст"
+msgstr "Հիմնական տեքստ"
+
+msgid "Текст для Instagram"
+msgstr "Տեքստ Instagram-ի համար"
+
+msgid "Текст для Telegram"
+msgstr "Տեքստ Telegram-ի համար"
+
+msgid "Текст для Facebook"
+msgstr "Տեքստ Facebook-ի համար"
+
+msgid "Общий текст для соц.сетей"
+msgstr "Ընդհանուր տեքստ սոց. ցանցերի համար"
+
+msgid "Внутренний комментарий"
+msgstr "Ներքին մեկնաբանություն"
+
+msgid "Не отправляется в пост, только для внутреннего использования."
+msgstr "Չի ուղարկվում փոստի հետ, միայն ներքին օգտագործման համար։"
+
+msgid "Обновлён"
+msgstr "Թարմացվել է"
+
+msgid "Посты"
+msgstr "Փոստեր"
+
+msgid "Вложение поста"
+msgstr "Փոստի կցորդ"
+
+msgid "Вложения поста"
+msgstr "Փոստի կցորդներ"
+
+msgid "Исходный пост"
+msgstr "Սկզբնաղբյուր փոստ"
+
+msgid "Создан автоматически"
+msgstr "Ստեղծվել է ավտոմատ"
+
+msgid "Пост в сетях продажи"
+msgstr "Վաճառքի փոստ"
+
+msgid "Файл (JPEG)"
+msgstr "Ֆայլ (JPEG)"
+
+msgid "Вложение (продажа)"
+msgstr "Կցորդ (վաճառք)"
+
+msgid "Вложения (продажа)"
+msgstr "Կցորդներ (վաճառք)"
+
+msgid "PNG, JPEG, AVIF, GIF, MP4, MOV."
+msgstr "PNG, JPEG, AVIF, GIF, MP4, MOV։"
+
+msgid "Приложения (только JPG)"
+msgstr "Կցորդներ (միայն JPG)"
+
+msgid "Цена (драм)"
+msgstr "Գին (դրամ)"
+
+msgid "В очереди"
+msgstr "Հերթում"
+
+msgid "Обрабатывается"
+msgstr "Մշակվում է"
+
+msgid "Готово"
+msgstr "Պատրաստ է"
+
+msgid "Ошибка"
+msgstr "Սխալ"
+
+msgid "Задача конвертации"
+msgstr "Փոխարկման առաջադրանք"
+
+msgid "Задачи конвертации"
+msgstr "Փոխարկման առաջադրանքներ"
+
+msgid "Конвертировать в"
+msgstr "Փոխարկել հետևյալ ձևաչափի"
+
+msgid "Файл слишком большой (максимум %(limit)s МБ)."
+msgstr "Ֆայլը չափազանց մեծ է (առավելագույնը՝ %(limit)s ՄԲ)։"
+
+msgid "Регистрация устарела, попробуйте снова."
+msgstr "Գրանցումը ժամկետանց է, փորձեք կրկին։"
+
+msgid "Вход устарел, попробуйте снова."
+msgstr "Մուտքը ժամկետանց է, փորձեք կրկին։"
+
+msgid "Некорректный ответ устройства."
+msgstr "Սարքի սխալ պատասխան։"
+
+msgid "PassKey не зарегистрирован."
+msgstr "PassKey-ը գրանցված չէ։"
+
+msgid "Пост создан."
+msgstr "Փոստը ստեղծվել է։"
+
+msgid "Пост в сетях продажи создан."
+msgstr "Վաճառքի փոստը ստեղծվել է։"
+
+msgid "Недопустимый тип файла (%(mime)s). Разрешены: PNG, JPEG, AVIF, GIF, MP4, MOV."
+msgstr "Անթույլատրելի ֆայլի տեսակ (%(mime)s)։ Թույլատրվում են՝ PNG, JPEG, AVIF, GIF, MP4, MOV։"
+
+msgid "Недопустимый тип файла (%(mime)s). Разрешён только JPEG."
+msgstr "Անթույլատրելի ֆայլի տեսակ (%(mime)s)։ Թույլատրվում է միայն JPEG։"
+
+msgid "Назад"
+msgstr "Հետ"
+
+msgid "Далее"
+msgstr "Հաջորդը"

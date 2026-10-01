@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{% trans "Безопасность" %}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>{% trans "Безопасность" %}</h1>
+    <p class="help-text">{% trans "Вход по паролю всегда доступен. PassKey — это дополнительный, более удобный способ входа с этого устройства." %}</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>{% trans "Устройство" %}</th>
+                <th>{% trans "Добавлен" %}</th>
+                <th>{% trans "Последнее использование" %}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for credential in credentials %}
+            <tr>
+                <td>{{ credential.device_name|default:"PassKey" }}</td>
+                <td>{{ credential.created_at }}</td>
+                <td>{{ credential.last_used_at|default:"—" }}</td>
+                <td>
+                    <form method="post" action="{% url 'accounts:credential_delete' credential.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="button button--danger">{% trans "Удалить" %}</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4">{% trans "PassKey ещё не добавлены." %}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <p style="margin-top:20px;">
+        <input type="text" id="device-name" placeholder="{% trans 'Название устройства (необязательно)' %}">
+        <button type="button" id="add-passkey-btn" class="button button--primary">{% trans "Добавить PassKey" %}</button>
+    </p>
+    <p id="passkey-register-error" class="messages__item messages__item--error" style="display:none;"></p>
+</div>
+{% endblock %}
+
+{% block extra_head %}
+<script src="{% static 'js/webauthn.js' %}" defer></script>
+<script defer>
+document.addEventListener("DOMContentLoaded", function () {
+    var btn = document.getElementById("add-passkey-btn");
+    var errorBox = document.getElementById("passkey-register-error");
+    btn.addEventListener("click", function () {
+        errorBox.style.display = "none";
+        var deviceName = document.getElementById("device-name").value;
+        SnpWebAuthn.registerPasskey(deviceName).then(function () {
+            window.location.reload();
+        }).catch(function (err) {
+            errorBox.textContent = err.message || "{% trans 'Не удалось добавить PassKey.' %}";
+            errorBox.style.display = "block";
+        });
+    });
+});
+</script>
+{% endblock %}

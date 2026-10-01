@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Посты в сетях продажи" %}{% endblock %}
+
+{% block content %}
+{% include "posts/_subnav.html" with active="sales" %}
+
+<div class="card" style="margin-top:16px;">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h1>{% trans "Посты в сетях продажи" %}</h1>
+        <a href="{% url 'posts:salespost_create' %}" class="button button--primary">{% trans "Новый пост" %}</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>{% trans "Заголовок" %}</th>
+                <th>{% trans "Цена (AMD)" %}</th>
+                <th>{% trans "Автоматически" %}</th>
+                <th>{% trans "Создан" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sales_post in sales_posts %}
+            <tr>
+                <td><a href="{% url 'posts:salespost_detail' sales_post.pk %}">{{ sales_post.title }}</a></td>
+                <td>{{ sales_post.price_amd }}</td>
+                <td>{% if sales_post.is_auto_generated %}✓{% else %}—{% endif %}</td>
+                <td>{{ sales_post.created_at }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4">{% trans "Постов пока нет." %}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% include "_pagination.html" %}
+</div>
+{% endblock %}

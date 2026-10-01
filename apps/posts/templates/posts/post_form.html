@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Новый пост" %}{% endblock %}
+
+{% block content %}
+{% include "posts/_subnav.html" with active="posts" %}
+
+<div class="card" style="margin-top:16px; max-width:640px;">
+    <h1>{% trans "Новый пост" %}</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p class="field-note">{% trans "Внутренний комментарий не отправляется в пост, используется только внутри компании." %}</p>
+        <button type="submit" class="button button--primary">{% trans "Создать" %}</button>
+    </form>
+</div>
+{% endblock %}

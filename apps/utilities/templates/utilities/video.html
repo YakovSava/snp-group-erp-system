@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{% trans "Конвертация видео" %}{% endblock %}
+
+{% block content %}
+{% include "utilities/_subnav.html" with active="video" %}
+
+<div class="card" style="margin-top:16px; max-width:640px;">
+    <h1>{% trans "Конвертация видео" %}</h1>
+    <p class="help-text">{% trans "До 100 МБ. Поддерживаются: MP4, MOV, MKV, AVI, WEBM → MP4, WEBM." %}</p>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="button button--primary">{% trans "Конвертировать" %}</button>
+    </form>
+</div>
+
+<div class="card">
+    <h2>{% trans "Последние задачи" %}</h2>
+    {% include "utilities/_jobs_table.html" %}
+</div>
+{% endblock %}
+
+{% block extra_head %}
+<script src="{% static 'js/conversion.js' %}" defer></script>
+{% endblock %}

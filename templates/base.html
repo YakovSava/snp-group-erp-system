@@ -1,0 +1,53 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="{% static 'images/favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <title>{% block title %}{{ COMPANY_NAME }}{% endblock %} — {{ COMPANY_NAME }}</title>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+{% if user.is_authenticated %}
+<header class="topbar">
+    <div class="topbar__brand">
+        <img src="{% static 'images/branding/logo-mark.png' %}" alt="{{ COMPANY_NAME }}" class="topbar__logo">
+    </div>
+    <nav class="dockbar">
+        <a href="{% url 'posts:post_list' %}" class="dockbar__item{% if request.resolver_match.app_name == 'posts' %} dockbar__item--active{% endif %}">{% trans "Посты и SMM" %}</a>
+        <a href="{% url 'utilities:photo' %}" class="dockbar__item{% if request.resolver_match.app_name == 'utilities' %} dockbar__item--active{% endif %}">{% trans "Утилиты" %}</a>
+        <span class="dockbar__item dockbar__item--disabled" title="{% trans 'Скоро' %}">{% trans "Агент и помощь" %}</span>
+        <span class="dockbar__item dockbar__item--disabled" title="{% trans 'Скоро' %}">{% trans "В разработке" %}</span>
+    </nav>
+    <div class="topbar__right">
+        {% include "_lang_switch.html" %}
+        <span class="topbar__user">{{ user.get_username }}</span>
+        <a href="{% url 'accounts:security' %}" class="topbar__link">{% trans "Безопасность" %}</a>
+        <form action="{% url 'accounts:logout' %}" method="post" class="logout-form">
+            {% csrf_token %}
+            <button type="submit" class="topbar__link topbar__link--button">{% trans "Выйти" %}</button>
+        </form>
+    </div>
+</header>
+{% else %}
+<div class="lang-switch lang-switch--floating">
+    {% include "_lang_switch.html" %}
+</div>
+{% endif %}
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+        <li class="messages__item messages__item--{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<main class="page">
+    {% block content %}{% endblock %}
+</main>
+</body>
+</html>

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "История" %}{% endblock %}
+
+{% block content %}
+{% include "utilities/_subnav.html" with active="history" %}
+
+<div class="card" style="margin-top:16px;">
+    <h1>{% trans "История" %}</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>{% trans "Пользователь" %}</th>
+                <th>{% trans "Что сделал" %}</th>
+                <th>{% trans "Когда" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in history_items %}
+            <tr>
+                <td>{{ item.user }}</td>
+                <td>{{ item.action }}</td>
+                <td>{{ item.created_at }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="3">{% trans "Записей пока нет." %}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% include "_pagination.html" %}
+</div>
+{% endblock %}

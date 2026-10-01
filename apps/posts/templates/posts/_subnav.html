@@ -1,0 +1,5 @@
+{% load i18n %}
+<nav class="subdockbar">
+    <a href="{% url 'posts:post_list' %}" class="subdockbar__item{% if active == 'posts' %} subdockbar__item--active{% endif %}">{% trans "Посты в соцсетях" %}</a>
+    <a href="{% url 'posts:salespost_list' %}" class="subdockbar__item{% if active == 'sales' %} subdockbar__item--active{% endif %}">{% trans "Посты в сетях продажи" %}</a>
+</nav>
