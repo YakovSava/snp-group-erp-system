@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{% trans "Агент и помощь" %}{% endblock %}
+
+{% block content %}
+<div class="card chat-card">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h1>{% trans "Агент и помощь" %}</h1>
+        <button type="button" id="new-conversation-btn" class="button">{% trans "Новый диалог" %}</button>
+    </div>
+
+    <div id="chat-log" class="chat-log">
+        {% for item in history %}
+            <div class="chat-message chat-message--{{ item.role }}">{{ item.html|safe }}</div>
+        {% empty %}
+            <p class="help-text">{% trans "Задайте вопрос ассистенту — он поддерживает Markdown, может искать в базе знаний компании, подсказывать курсы валют и редактировать изображения." %}</p>
+        {% endfor %}
+    </div>
+
+    <form id="chat-form" class="chat-form">
+        {% csrf_token %}
+        <textarea name="message" id="chat-message" rows="2" placeholder="{% trans 'Сообщение...' %}" required></textarea>
+        <input type="file" name="files" id="chat-files" multiple>
+        <button type="submit" class="button button--primary">{% trans "Отправить" %}</button>
+    </form>
+    <p id="chat-error" class="messages__item messages__item--error" style="display:none;"></p>
+</div>
+{% endblock %}
+
+{% block extra_head %}
+<style>
+.chat-card { max-width: 760px; }
+.chat-log { max-height: 50vh; overflow-y: auto; margin: 16px 0; display: flex; flex-direction: column; gap: 10px; }
+.chat-message { padding: 10px 14px; border-radius: var(--radius); max-width: 85%; }
+.chat-message--user { align-self: flex-end; background: var(--color-accent); }
+.chat-message--assistant { align-self: flex-start; background: var(--color-gray-100); }
+.chat-message p:first-child { margin-top: 0; }
+.chat-message p:last-child { margin-bottom: 0; }
+.chat-form { display: flex; gap: 10px; align-items: flex-start; flex-wrap: wrap; }
+.chat-form textarea { flex: 1; min-width: 240px; }
+</style>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var form = document.getElementById("chat-form");
+    var log = document.getElementById("chat-log");
+    var errorBox = document.getElementById("chat-error");
+    var newConversationBtn = document.getElementById("new-conversation-btn");
+
+    function appendMessage(role, html) {
+        var div = document.createElement("div");
+        div.className = "chat-message chat-message--" + role;
+        div.innerHTML = html;
+        log.appendChild(div);
+        log.scrollTop = log.scrollHeight;
+    }
+
+    function getCookie(name) {
+        var match = document.cookie.match(new RegExp("(^|; )" + name + "=([^;]*)"));
+        return match ? decodeURIComponent(match[2]) : null;
+    }
+
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        errorBox.style.display = "none";
+
+        var messageInput = document.getElementById("chat-message");
+        var message = messageInput.value.trim();
+        if (!message) {
+            return;
+        }
+        appendMessage("user", message.replace(/</g, "&lt;"));
+
+        var formData = new FormData(form);
+        fetch("{% url 'agent:send_message' %}", {
+            method: "POST",
+            body: formData,
+            headers: { "X-CSRFToken": getCookie("csrftoken") },
+        })
+            .then(function (response) {
+                return response.json().then(function (data) {
+                    if (!response.ok) {
+                        throw new Error(data.error || "{% trans 'Ошибка запроса.' %}");
+                    }
+                    return data;
+                });
+            })
+            .then(function (data) {
+                appendMessage("assistant", data.reply_html);
+                messageInput.value = "";
+                document.getElementById("chat-files").value = "";
+            })
+            .catch(function (err) {
+                errorBox.textContent = err.message;
+                errorBox.style.display = "block";
+            });
+    });
+
+    newConversationBtn.addEventListener("click", function () {
+        fetch("{% url 'agent:new_conversation' %}", {
+            method: "POST",
+            headers: { "X-CSRFToken": getCookie("csrftoken") },
+        }).then(function () {
+            window.location.reload();
+        });
+    });
+});
+</script>
+{% endblock %}

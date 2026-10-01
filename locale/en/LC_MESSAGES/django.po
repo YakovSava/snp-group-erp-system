@@ -344,3 +344,24 @@ msgstr "Previous"
 
 msgid "Далее"
 msgstr "Next"
+
+msgid "Новый диалог"
+msgstr "New conversation"
+
+msgid "Задайте вопрос ассистенту — он поддерживает Markdown, может искать в базе знаний компании, подсказывать курсы валют и редактировать изображения."
+msgstr "Ask the assistant a question — it supports Markdown, can search the company knowledge base, quote currency rates, and edit images."
+
+msgid "Сообщение..."
+msgstr "Message..."
+
+msgid "Отправить"
+msgstr "Send"
+
+msgid "Ошибка запроса."
+msgstr "Request error."
+
+msgid "Сообщение не может быть пустым."
+msgstr "Message cannot be empty."
+
+msgid "AI-ассистент временно недоступен. Попробуйте позже."
+msgstr "The AI assistant is temporarily unavailable. Please try again later."

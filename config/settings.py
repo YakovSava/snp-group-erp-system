@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     "apps.accounts",
     "apps.posts",
     "apps.utilities",
+    "apps.agent",
 ]
 
 MIDDLEWARE = [
@@ -145,6 +146,11 @@ LOGIN_EXEMPT_URL_NAMES = [
 WEBAUTHN_RP_ID = env("WEBAUTHN_RP_ID", default="localhost")
 WEBAUTHN_RP_NAME = env("WEBAUTHN_RP_NAME", default="SNP ESB")
 WEBAUTHN_ORIGIN = env("WEBAUTHN_ORIGIN", default="http://localhost:8000")
+
+# --- ai-assistant (separate service, see /ai-assistant) ----------------------
+
+AI_ASSISTANT_BASE_URL = env("AI_ASSISTANT_BASE_URL", default="http://host.docker.internal:8001")
+AI_ASSISTANT_SERVICE_TOKEN = env("AI_ASSISTANT_SERVICE_TOKEN", default="dev-only-shared-token-7f3a9c1e5b8d2f6a")
 
 # --- DRF ---------------------------------------------------------------------
 

@@ -70,6 +70,35 @@ class PostAttachment(models.Model):
         return self.file.name
 
 
+class PostTranslation(models.Model):
+    """AI-generated localized copy of Post.text, created automatically on
+    Post creation by apps.posts.tasks.localize_post. 'ru' isn't stored here
+    since it's the source language (Post.text itself).
+    """
+
+    LANGUAGE_EN = "en"
+    LANGUAGE_HY = "hy"
+    LANGUAGE_CHOICES = [
+        (LANGUAGE_EN, _("Английский")),
+        (LANGUAGE_HY, _("Армянский")),
+    ]
+
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="translations")
+    language = models.CharField(_("Язык"), max_length=5, choices=LANGUAGE_CHOICES)
+    text = models.TextField(_("Текст"))
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=["post", "language"], name="unique_post_translation_language"),
+        ]
+        verbose_name = _("Перевод поста")
+        verbose_name_plural = _("Переводы поста")
+
+    def __str__(self):
+        return f"{self.post_id} [{self.language}]"
+
+
 class SalesPost(models.Model):
     """Пост в соц.сетях продажи (list.am/avito и т.п.)."""
 

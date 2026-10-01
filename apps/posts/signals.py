@@ -17,6 +17,10 @@ def handle_post_saved(sender, instance, created, **kwargs):
 
     post_created.send(sender=Post, post=instance)
 
+    from .tasks import localize_post
+
+    transaction.on_commit(lambda: localize_post.delay(instance.pk))
+
     if instance.send_to_marketplace:
         from .tasks import create_sales_post_from_post
 

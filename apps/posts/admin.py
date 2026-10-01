@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Post, PostAttachment, SalesPost, SalesPostAttachment
+from .models import Post, PostAttachment, PostTranslation, SalesPost, SalesPostAttachment
 
 
 class PostAttachmentInline(admin.TabularInline):
@@ -8,11 +8,21 @@ class PostAttachmentInline(admin.TabularInline):
     extra = 0
 
 
+class PostTranslationInline(admin.TabularInline):
+    model = PostTranslation
+    extra = 0
+    readonly_fields = ("language", "text", "created_at")
+    can_delete = False
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ("id", "short_text", "send_to_marketplace", "created_by", "created_at")
     list_filter = ("send_to_marketplace",)
-    inlines = [PostAttachmentInline]
+    inlines = [PostAttachmentInline, PostTranslationInline]
     fields = (
         "text",
         "instagram_text",

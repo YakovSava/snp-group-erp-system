@@ -1,12 +1,19 @@
 from rest_framework import serializers
 
-from ..models import Post, PostAttachment, SalesPost, SalesPostAttachment
+from ..models import Post, PostAttachment, PostTranslation, SalesPost, SalesPostAttachment
 
 
 class PostAttachmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostAttachment
         fields = ["id", "file", "uploaded_at"]
+        read_only_fields = fields
+
+
+class PostTranslationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostTranslation
+        fields = ["language", "text", "created_at"]
         read_only_fields = fields
 
 
@@ -17,6 +24,7 @@ class PostSerializer(serializers.ModelSerializer):
     """
 
     attachments = PostAttachmentSerializer(many=True, read_only=True)
+    translations = PostTranslationSerializer(many=True, read_only=True)
     created_by = serializers.StringRelatedField(read_only=True)
 
     class Meta:
@@ -31,11 +39,12 @@ class PostSerializer(serializers.ModelSerializer):
             "internal_comment",
             "send_to_marketplace",
             "attachments",
+            "translations",
             "created_by",
             "created_at",
             "updated_at",
         ]
-        read_only_fields = ["id", "attachments", "created_by", "created_at", "updated_at"]
+        read_only_fields = ["id", "attachments", "translations", "created_by", "created_at", "updated_at"]
 
 
 class SalesPostAttachmentSerializer(serializers.ModelSerializer):

@@ -32,3 +32,13 @@ Password login always works. A signed-in user can add a PassKey for this device 
 
 - `/api/v1/` — token-authenticated (`rest_framework.authtoken`; issue tokens to service accounts from `/admin/`), read/write `posts/`, `sales-posts/`, read-only `conversion-history/`. This is the surface other ESB components are meant to consume.
 - `/api/internal/` — session-authenticated, powers the site's own upload/status-polling UI only.
+
+## ai-assistant
+
+"Агент и помощь" (and automatic post translation/currency localization) is powered by the separate `ai-assistant/` service — its own Docker stack, see `ai-assistant/README.md`. Start it first:
+
+```
+cd ai-assistant && docker compose up --build
+```
+
+It must be reachable at `AI_ASSISTANT_BASE_URL` (default `http://host.docker.internal:8001`) with a `AI_ASSISTANT_SERVICE_TOKEN` matching ai-assistant's `SERVICE_TOKEN` — both already set to matching dev defaults in the included `.env` files. Django only ever proxies to it; the browser never talks to ai-assistant directly.
