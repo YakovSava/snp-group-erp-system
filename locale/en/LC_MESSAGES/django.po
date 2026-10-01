@@ -365,3 +365,45 @@ msgstr "Message cannot be empty."
 
 msgid "AI-ассистент временно недоступен. Попробуйте позже."
 msgstr "The AI assistant is temporarily unavailable. Please try again later."
+
+msgid "SMM инструмент"
+msgstr "SMM tool"
+
+msgid "Загрузите фото товара плохого качества и короткое описание — AI почистит фото (уберёт водяные знаки, сделает фон белым) и подготовит черновик поста. Проверьте и примите, либо попросите улучшить ещё раз."
+msgstr "Upload a poor-quality product photo and a short description — the AI will clean up the photo (remove watermarks, make the background white) and draft a post. Review it and accept, or ask for further improvement."
+
+msgid "Фото товара"
+msgstr "Product photo"
+
+msgid "Описание товара"
+msgstr "Product description"
+
+msgid "Например: прокладки для системы охлаждения Volvo, оригинал, комплект 2 шт."
+msgstr "E.g.: Volvo cooling system gaskets, original, set of 2."
+
+msgid "Сгенерировать черновик"
+msgstr "Generate draft"
+
+msgid "Обрабатываем фото и готовим текст — это может занять около минуты..."
+msgstr "Processing the photo and preparing the text — this may take about a minute..."
+
+msgid "Что улучшить? (необязательно)"
+msgstr "What to improve? (optional)"
+
+msgid "Улучшить ещё"
+msgstr "Improve further"
+
+msgid "Отменить"
+msgstr "Cancel"
+
+msgid "Принять и создать пост"
+msgstr "Accept and create post"
+
+msgid "Нужны и фото, и описание товара."
+msgstr "Both a photo and a product description are required."
+
+msgid "Сначала создайте черновик."
+msgstr "Create a draft first."
+
+msgid "Черновик не найден."
+msgstr "Draft not found."

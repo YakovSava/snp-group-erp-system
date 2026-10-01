@@ -1,4 +1,3 @@
-import base64
 import dataclasses
 import os
 import uuid
@@ -104,8 +103,9 @@ def handle_chat_turn(
 
     if image_attachments and _looks_like_image_edit_request(message):
         settings = get_settings()
+        # The gateway returns edited images as JPEG regardless of the input format.
         edited_bytes = llm_client.edit_image(image_attachments[0].data, prompt=message)
-        filename = f"{uuid.uuid4().hex}.png"
+        filename = f"{uuid.uuid4().hex}.jpg"
         path = os.path.join(settings.media_root, filename)
         with open(path, "wb") as fh:
             fh.write(edited_bytes)
@@ -113,7 +113,7 @@ def handle_chat_turn(
         reply_attachments.append(
             AttachmentInput(
                 original_filename=filename,
-                mime_type="image/png",
+                mime_type="image/jpeg",
                 data=edited_bytes,
                 file_path=path,
             )
@@ -135,13 +135,7 @@ def handle_chat_turn(
         user_content: object = message
         if image_attachments:
             # Vision input: let the model see the image directly (Q&A, not an edit).
-            parts = [{"type": "text", "text": message}]
-            for attachment in image_attachments:
-                b64 = base64.b64encode(attachment.data).decode()
-                parts.append(
-                    {"type": "image_url", "image_url": {"url": f"data:{attachment.mime_type};base64,{b64}"}}
-                )
-            user_content = parts
+            user_content = llm_client.build_vision_content(message, [a.data for a in image_attachments])
 
         llm_messages = list(history[:-1])  # history includes the just-added user turn; replace its content below
         if context_blocks:

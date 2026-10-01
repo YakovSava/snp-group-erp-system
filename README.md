@@ -4,11 +4,13 @@ Internal Django service (ESB core): social-media / marketplace post management a
 
 ## Run
 
+Requires Docker Compose **v2.20+** (for the `include:` directive — check with `docker compose version`; anything from the last couple of years is fine). Run `docker compose config` once if you want to sanity-check how the merged config resolves before starting anything.
+
 ```
 docker compose up --build
 ```
 
-This starts `web` (gunicorn, :8000), `celery_worker`, `celery_beat`, `db` (Postgres) and `redis`. On first boot the `web` container runs migrations, compiles translations, generates `static/images/favicon.ico` from the brand logo, and collects static files.
+This one command starts **everything**: `web` (gunicorn, :8000), `celery_worker`, `celery_beat`, `db` (Postgres), `redis` — and, via Compose's `include:` (see the top of `docker-compose.yml`), the separate `ai-assistant/` stack too (`api` on :8001, its own `ai_db`). They're still independently deployable (`cd ai-assistant && docker compose up` works on its own), but the root command now brings both up together on one Docker network, so `web`/`celery_worker` reach ai-assistant at `http://api:8000` with no extra setup. On first boot the `web` container runs migrations, compiles translations, generates `static/images/favicon.ico` from the brand logo, and collects static files.
 
 Create an admin account (there is no public registration):
 
@@ -35,10 +37,8 @@ Password login always works. A signed-in user can add a PassKey for this device 
 
 ## ai-assistant
 
-"Агент и помощь" (and automatic post translation/currency localization) is powered by the separate `ai-assistant/` service — its own Docker stack, see `ai-assistant/README.md`. Start it first:
+"AI" (chat + SMM tool) and automatic post translation/currency localization are powered by the separate `ai-assistant/` service — see `ai-assistant/README.md`. `docker compose up --build` from this directory starts it automatically (via `include:`); no separate step needed.
 
-```
-cd ai-assistant && docker compose up --build
-```
+It's reached at `AI_ASSISTANT_BASE_URL` with a `AI_ASSISTANT_SERVICE_TOKEN` matching ai-assistant's `SERVICE_TOKEN` — both already set to matching dev defaults in the included `.env` files. Django only ever proxies to it; the browser never talks to ai-assistant directly.
 
-It must be reachable at `AI_ASSISTANT_BASE_URL` (default `http://host.docker.internal:8001`) with a `AI_ASSISTANT_SERVICE_TOKEN` matching ai-assistant's `SERVICE_TOKEN` — both already set to matching dev defaults in the included `.env` files. Django only ever proxies to it; the browser never talks to ai-assistant directly.
+**Running them apart instead** (e.g. deploying ai-assistant on a different host): run `cd ai-assistant && docker compose up --build` on its own there, and point this project's `AI_ASSISTANT_BASE_URL` at wherever it's reachable from — `http://host.docker.internal:8001` if it's a separately-started stack on the same machine (add back `extra_hosts: ["host.docker.internal:host-gateway"]` on the `web`/`celery_worker` services in that case), or its real network address otherwise.

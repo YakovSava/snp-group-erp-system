@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{% trans "SMM инструмент" %}{% endblock %}
+
+{% block content %}
+{% include "agent/_subnav.html" with active="smm" %}
+
+<div class="card smm-card" style="margin-top:16px;">
+    <h1>{% trans "SMM инструмент" %}</h1>
+    <p class="help-text">{% trans "Загрузите фото товара плохого качества и короткое описание — AI почистит фото (уберёт водяные знаки, сделает фон белым) и подготовит черновик поста. Проверьте и примите, либо попросите улучшить ещё раз." %}</p>
+
+    <form id="smm-generate-form" class="smm-form" enctype="multipart/form-data" {% if draft %}style="display:none;"{% endif %}>
+        {% csrf_token %}
+        <p>
+            <label for="smm-photo">{% trans "Фото товара" %}</label>
+            <input type="file" name="photo" id="smm-photo" accept="image/*" required>
+        </p>
+        <p>
+            <label for="smm-description">{% trans "Описание товара" %}</label>
+            <textarea name="description" id="smm-description" rows="3" required placeholder="{% trans 'Например: прокладки для системы охлаждения Volvo, оригинал, комплект 2 шт.' %}"></textarea>
+        </p>
+        <button type="submit" class="button button--primary">{% trans "Сгенерировать черновик" %}</button>
+    </form>
+
+    <div id="smm-loading" class="help-text" style="display:none;">{% trans "Обрабатываем фото и готовим текст — это может занять около минуты..." %}</div>
+    <p id="smm-error" class="messages__item messages__item--error" style="display:none;"></p>
+
+    <div id="smm-draft" class="smm-draft" {% if not draft %}style="display:none;"{% endif %}>
+        <div class="smm-draft__layout">
+            <div class="smm-draft__image">
+                <img id="smm-draft-image" src="{% if draft %}{{ draft.image_url }}{% endif %}" alt="">
+            </div>
+            <div class="smm-draft__fields">
+                <p>
+                    <label>{% trans "Основной текст" %}</label>
+                    <textarea id="smm-post_text" rows="4">{% if draft %}{{ draft.post_text }}{% endif %}</textarea>
+                </p>
+                <p>
+                    <label>{% trans "Текст для Instagram" %}</label>
+                    <textarea id="smm-instagram_text" rows="3">{% if draft %}{{ draft.instagram_text }}{% endif %}</textarea>
+                </p>
+                <p>
+                    <label>{% trans "Текст для Telegram" %}</label>
+                    <textarea id="smm-telegram_text" rows="3">{% if draft %}{{ draft.telegram_text }}{% endif %}</textarea>
+                </p>
+                <p>
+                    <label>{% trans "Текст для Facebook" %}</label>
+                    <textarea id="smm-facebook_text" rows="3">{% if draft %}{{ draft.facebook_text }}{% endif %}</textarea>
+                </p>
+                <p>
+                    <label>{% trans "Общий текст для соц.сетей" %}</label>
+                    <textarea id="smm-common_social_text" rows="3">{% if draft %}{{ draft.common_social_text }}{% endif %}</textarea>
+                </p>
+                <p>
+                    <label><input type="checkbox" id="smm-send_to_marketplace" style="width:auto;"> {% trans "Отправлять в list.am/avito?" %}</label>
+                </p>
+            </div>
+        </div>
+
+        <div class="smm-draft__refine">
+            <input type="text" id="smm-refine-input" placeholder="{% trans 'Что улучшить? (необязательно)' %}">
+            <button type="button" id="smm-refine-btn" class="button">{% trans "Улучшить ещё" %}</button>
+        </div>
+
+        <div class="smm-draft__actions">
+            <button type="button" id="smm-discard-btn" class="button button--danger">{% trans "Отменить" %}</button>
+            <button type="button" id="smm-accept-btn" class="button button--primary">{% trans "Принять и создать пост" %}</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_head %}
+<style>
+.smm-card { max-width: 980px; }
+.smm-form textarea { width: 100%; }
+.smm-draft__layout { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 16px; }
+.smm-draft__image { flex: 0 0 320px; }
+.smm-draft__image img { width: 100%; border-radius: var(--radius); border: 1px solid var(--color-gray-300); }
+.smm-draft__fields { flex: 1; min-width: 280px; }
+.smm-draft__fields textarea { width: 100%; }
+.smm-draft__refine { display: flex; gap: 10px; margin-top: 10px; }
+.smm-draft__refine input { flex: 1; }
+.smm-draft__actions { display: flex; gap: 10px; margin-top: 16px; }
+</style>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    function getCookie(name) {
+        var match = document.cookie.match(new RegExp("(^|; )" + name + "=([^;]*)"));
+        return match ? decodeURIComponent(match[2]) : null;
+    }
+
+    var generateForm = document.getElementById("smm-generate-form");
+    var draftSection = document.getElementById("smm-draft");
+    var loading = document.getElementById("smm-loading");
+    var errorBox = document.getElementById("smm-error");
+
+    var FIELD_IDS = ["post_text", "instagram_text", "telegram_text", "facebook_text", "common_social_text"];
+
+    function showError(message) {
+        errorBox.textContent = message;
+        errorBox.style.display = "block";
+    }
+
+    function applyDraft(draft) {
+        document.getElementById("smm-draft-image").src = draft.image_url;
+        FIELD_IDS.forEach(function (field) {
+            document.getElementById("smm-" + field).value = draft[field] || "";
+        });
+        draftSection.style.display = "block";
+        generateForm.style.display = "none";
+    }
+
+    function postForm(url, formData) {
+        return fetch(url, {
+            method: "POST",
+            body: formData,
+            headers: { "X-CSRFToken": getCookie("csrftoken") },
+        }).then(function (response) {
+            return response.json().then(function (data) {
+                if (!response.ok) {
+                    throw new Error(data.error || "{% trans 'Ошибка запроса.' %}");
+                }
+                return data;
+            });
+        });
+    }
+
+    generateForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        errorBox.style.display = "none";
+        loading.style.display = "block";
+
+        var formData = new FormData(generateForm);
+        postForm("{% url 'agent:smm_generate' %}", formData)
+            .then(function (data) {
+                applyDraft(data.draft);
+            })
+            .catch(function (err) {
+                showError(err.message);
+            })
+            .finally(function () {
+                loading.style.display = "none";
+            });
+    });
+
+    document.getElementById("smm-refine-btn").addEventListener("click", function () {
+        errorBox.style.display = "none";
+        loading.style.display = "block";
+
+        var formData = new FormData();
+        formData.append("refine_instructions", document.getElementById("smm-refine-input").value);
+        postForm("{% url 'agent:smm_refine' %}", formData)
+            .then(function (data) {
+                applyDraft(data.draft);
+                document.getElementById("smm-refine-input").value = "";
+            })
+            .catch(function (err) {
+                showError(err.message);
+            })
+            .finally(function () {
+                loading.style.display = "none";
+            });
+    });
+
+    document.getElementById("smm-discard-btn").addEventListener("click", function () {
+        postForm("{% url 'agent:smm_discard' %}", new FormData()).then(function () {
+            window.location.reload();
+        });
+    });
+
+    document.getElementById("smm-accept-btn").addEventListener("click", function () {
+        errorBox.style.display = "none";
+        var formData = new FormData();
+        FIELD_IDS.forEach(function (field) {
+            formData.append(field, document.getElementById("smm-" + field).value);
+        });
+        if (document.getElementById("smm-send_to_marketplace").checked) {
+            formData.append("send_to_marketplace", "on");
+        }
+        postForm("{% url 'agent:smm_accept' %}", formData)
+            .then(function (data) {
+                window.location.href = data.redirect_url;
+            })
+            .catch(function (err) {
+                showError(err.message);
+            });
+    });
+});
+</script>
+{% endblock %}

@@ -1,3 +1,8 @@
+include:
+  - path: ai-assistant/docker-compose.yml
+    project_directory: ai-assistant
+    env_file: ai-assistant/.env
+
 services:
   db:
     image: postgres:16-alpine
@@ -34,18 +39,25 @@ services:
     env_file: .env
     environment:
       RUN_INIT: "1"
-    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3
+    # --timeout 240: comfortably above the longest ai-assistant call this
+    # view makes (the SMM tool's /v1/smm/draft, given 220s on the httpx side
+    # in apps/core/ai_client.py — an image edit plus a vision copy-generation
+    # call, each independently retried on ai-assistant's side, honoring the
+    # gateway's own "retry_after" backoff when it asks for one, up to ~30s
+    # per retry). Gunicorn's default 30s was killing the worker mid-request
+    # before ai-assistant ever got a chance to finish or time out on its own.
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 240
     ports:
       - "8000:8000"
     volumes:
       - static_root:/app/static_root
       - media_root:/app/media
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     depends_on:
       db:
         condition: service_healthy
       redis:
+        condition: service_healthy
+      api:
         condition: service_healthy
 
   celery_worker:
@@ -57,12 +69,12 @@ services:
     command: celery -A config worker -l info
     volumes:
       - media_root:/app/media
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     depends_on:
       db:
         condition: service_healthy
       redis:
+        condition: service_healthy
+      api:
         condition: service_healthy
 
   celery_beat:

@@ -26,7 +26,10 @@ def upgrade() -> None:
     )
     op.create_index("ix_conversations_external_user_id", "conversations", ["external_user_id"])
 
-    message_role.create(op.get_bind(), checkfirst=True)
+    # No separate message_role.create() call: op.create_table() below
+    # already creates the Postgres ENUM type as part of the "role" column —
+    # calling .create() first and then referencing it in create_table()
+    # causes SQLAlchemy to try creating it twice (DuplicateObject).
     op.create_table(
         "messages",
         sa.Column("id", sa.Integer(), primary_key=True),
@@ -76,6 +79,7 @@ def downgrade() -> None:
     op.drop_table("message_attachments")
     op.drop_index("ix_messages_conversation_id", table_name="messages")
     op.drop_table("messages")
-    message_role.drop(op.get_bind(), checkfirst=True)
+    # op.drop_table() above already drops the message_role ENUM type along
+    # with the last table that references it — no separate drop needed.
     op.drop_index("ix_conversations_external_user_id", table_name="conversations")
     op.drop_table("conversations")

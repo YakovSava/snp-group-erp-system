@@ -1,16 +1,23 @@
 services:
-  db:
+  ai_db:
     image: postgres:16-alpine
     restart: unless-stopped
+    # env_file alone (no `environment:` block): env_file injects these vars
+    # straight into the container, bypassing Compose's own ${VAR} YAML
+    # interpolation entirely. That interpolation is NOT reliably scoped to
+    # this included file's own .env (it was observed resolving against the
+    # root project's .env instead, silently initializing this database with
+    # auto-smm's Postgres password rather than ai-assistant's own) — so any
+    # ${POSTGRES_*} here would risk the same collision.
     env_file: .env
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ai_postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      # $POSTGRES_USER/$POSTGRES_DB here are shell-expanded inside the
+      # container at healthcheck-run time (from the env_file-injected vars
+      # above), not Compose-YAML-interpolated — same collision-avoidance
+      # reasoning as above.
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -26,11 +33,17 @@ services:
     volumes:
       - chroma_data:/app/chroma_data
       - media_data:/app/media
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
     depends_on:
-      db:
+      ai_db:
         condition: service_healthy
 
 volumes:
-  postgres_data:
+  ai_postgres_data:
   chroma_data:
   media_data:

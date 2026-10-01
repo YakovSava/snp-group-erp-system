@@ -4,7 +4,9 @@
 {% block title %}{% trans "Агент и помощь" %}{% endblock %}
 
 {% block content %}
-<div class="card chat-card">
+{% include "agent/_subnav.html" with active="chat" %}
+
+<div class="card chat-card" style="margin-top:16px;">
     <div style="display:flex; justify-content:space-between; align-items:center;">
         <h1>{% trans "Агент и помощь" %}</h1>
         <button type="button" id="new-conversation-btn" class="button">{% trans "Новый диалог" %}</button>

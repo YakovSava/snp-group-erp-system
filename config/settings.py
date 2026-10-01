@@ -149,7 +149,7 @@ WEBAUTHN_ORIGIN = env("WEBAUTHN_ORIGIN", default="http://localhost:8000")
 
 # --- ai-assistant (separate service, see /ai-assistant) ----------------------
 
-AI_ASSISTANT_BASE_URL = env("AI_ASSISTANT_BASE_URL", default="http://host.docker.internal:8001")
+AI_ASSISTANT_BASE_URL = env("AI_ASSISTANT_BASE_URL", default="http://api:8000")
 AI_ASSISTANT_SERVICE_TOKEN = env("AI_ASSISTANT_SERVICE_TOKEN", default="dev-only-shared-token-7f3a9c1e5b8d2f6a")
 
 # --- DRF ---------------------------------------------------------------------

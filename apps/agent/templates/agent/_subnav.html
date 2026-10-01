@@ -1,0 +1,5 @@
+{% load i18n %}
+<nav class="subdockbar">
+    <a href="{% url 'agent:chat' %}" class="subdockbar__item{% if active == 'chat' %} subdockbar__item--active{% endif %}">{% trans "Агент и помощь" %}</a>
+    <a href="{% url 'agent:smm_tool' %}" class="subdockbar__item{% if active == 'smm' %} subdockbar__item--active{% endif %}">{% trans "SMM инструмент" %}</a>
+</nav>

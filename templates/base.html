@@ -19,7 +19,7 @@
     <nav class="dockbar">
         <a href="{% url 'posts:post_list' %}" class="dockbar__item{% if request.resolver_match.app_name == 'posts' %} dockbar__item--active{% endif %}">{% trans "Посты и SMM" %}</a>
         <a href="{% url 'utilities:photo' %}" class="dockbar__item{% if request.resolver_match.app_name == 'utilities' %} dockbar__item--active{% endif %}">{% trans "Утилиты" %}</a>
-        <a href="{% url 'agent:chat' %}" class="dockbar__item{% if request.resolver_match.app_name == 'agent' %} dockbar__item--active{% endif %}">{% trans "Агент и помощь" %}</a>
+        <a href="{% url 'agent:chat' %}" class="dockbar__item{% if request.resolver_match.app_name == 'agent' %} dockbar__item--active{% endif %}">AI</a>
         <span class="dockbar__item dockbar__item--disabled" title="{% trans 'Скоро' %}">{% trans "В разработке" %}</span>
     </nav>
     <div class="topbar__right">

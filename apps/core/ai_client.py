@@ -39,7 +39,10 @@ def chat(external_user_id: str, message: str, conversation_id: int | None = None
         data=data,
         files=file_tuples or None,
         headers=_headers(),
-        timeout=60.0,  # image generation/editing turns can run long
+        # ai-assistant retries its own gateway calls up to 3x, honoring the
+        # gateway's own "retry_after" backoff (observed up to 30s, capped)
+        # on top of request time — this needs enough headroom for that.
+        timeout=120.0,
     )
     response.raise_for_status()
     return response.json()
@@ -50,6 +53,35 @@ def list_conversations(external_user_id: str) -> list:
         f"{settings.AI_ASSISTANT_BASE_URL}/v1/conversations/{external_user_id}",
         headers=_headers(),
         timeout=DEFAULT_TIMEOUT,
+    )
+    response.raise_for_status()
+    return response.json()
+
+
+def generate_smm_draft(
+    description: str,
+    image_bytes: bytes,
+    filename: str = "photo.jpg",
+    refine_instructions: str = "",
+) -> dict:
+    """Cleans up a product photo and drafts post copy from it + description.
+
+    Used both for the initial draft (image_bytes = the raw uploaded photo)
+    and for "improve further" refinement (image_bytes = the previous draft's
+    image, refine_instructions = the user's extra instructions) — ai-assistant
+    doesn't track draft state itself, so Django resends whatever the current
+    image is each time.
+    """
+    response = httpx.post(
+        f"{settings.AI_ASSISTANT_BASE_URL}/v1/smm/draft",
+        data={"description": description, "refine_instructions": refine_instructions},
+        files={"image": (filename, image_bytes, "image/jpeg")},
+        headers=_headers(),
+        # Two sequential gateway calls (image edit, then vision copy
+        # generation), each independently retried up to 3x with up to ~30s
+        # backoff per retry when the gateway asks for it — worst case is
+        # comfortably under this.
+        timeout=220.0,
     )
     response.raise_for_status()
     return response.json()

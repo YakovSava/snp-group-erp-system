@@ -67,3 +67,12 @@ class KnowledgeIngestRequest(BaseModel):
 
 class KnowledgeIngestResponse(BaseModel):
     chunks_ingested: int
+
+
+class SmmDraftResponse(BaseModel):
+    image_b64: str
+    post_text: str
+    instagram_text: str
+    telegram_text: str
+    facebook_text: str
+    common_social_text: str
