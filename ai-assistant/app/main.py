@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from .currency import scheduler
-from .routers import chat, currency, images, knowledge, smm, translate
+from .routers import catalog, chat, currency, images, knowledge, smm, translate
 
 
 @asynccontextmanager
@@ -21,6 +21,7 @@ app.include_router(currency.router)
 app.include_router(images.router)
 app.include_router(knowledge.router)
 app.include_router(smm.router)
+app.include_router(catalog.router)
 
 
 @app.get("/health")

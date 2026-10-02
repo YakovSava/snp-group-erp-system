@@ -2,11 +2,11 @@
 {% if is_paginated %}
 <div style="display:flex; gap:10px; margin-top:16px;">
     {% if page_obj.has_previous %}
-        <a class="button" href="?page={{ page_obj.previous_page_number }}">{% trans "Назад" %}</a>
+        <a class="button" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value|urlencode }}&amp;{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}">{% trans "Назад" %}</a>
     {% endif %}
     <span class="help-text">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
     {% if page_obj.has_next %}
-        <a class="button" href="?page={{ page_obj.next_page_number }}">{% trans "Далее" %}</a>
+        <a class="button" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value|urlencode }}&amp;{% endif %}{% endfor %}page={{ page_obj.next_page_number }}">{% trans "Далее" %}</a>
     {% endif %}
 </div>
 {% endif %}

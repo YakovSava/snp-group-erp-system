@@ -32,10 +32,11 @@ class PostSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "text",
-            "instagram_text",
+            "meta_text",
             "telegram_text",
-            "facebook_text",
             "common_social_text",
+            "price_amount",
+            "price_currency",
             "internal_comment",
             "send_to_marketplace",
             "attachments",

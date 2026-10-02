@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     "apps.posts",
     "apps.utilities",
     "apps.agent",
+    "apps.catalog",
 ]
 
 MIDDLEWARE = [
@@ -180,6 +181,8 @@ CONVERSION_MAX_UPLOAD_SIZES = {
     "document": 300 * 1024 * 1024,
 }
 CONVERSION_FILE_TTL_MINUTES = 30
+
+CATALOG_IMPORT_MAX_UPLOAD_SIZE = 20 * 1024 * 1024
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 300 * 1024 * 1024
 FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024

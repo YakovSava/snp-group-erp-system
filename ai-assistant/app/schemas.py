@@ -72,7 +72,29 @@ class KnowledgeIngestResponse(BaseModel):
 class SmmDraftResponse(BaseModel):
     image_b64: str
     post_text: str
-    instagram_text: str
+    meta_text: str
     telegram_text: str
-    facebook_text: str
     common_social_text: str
+
+
+class SalesTitleRequest(BaseModel):
+    text: str
+
+
+class SalesTitleResponse(BaseModel):
+    title: str
+
+
+class CatalogMappingRequest(BaseModel):
+    headers: list[str]
+    sample_rows: list[list[str]]
+
+
+class CatalogMappingResponse(BaseModel):
+    # One entry per input column, in order — each one of CATALOG_COLUMN_FIELDS
+    # (see routers/catalog.py). The employee reviews/corrects this before
+    # anything is imported, so a wrong guess here is cheap to fix.
+    column_fields: list[str]
+    amount_rub_markup_percent: float | None = None
+    amount_usd_markup_percent: float | None = None
+    notes: str = ""

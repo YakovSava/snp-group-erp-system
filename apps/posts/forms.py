@@ -25,8 +25,11 @@ class MultiFileField(forms.FileField):
 class PostForm(forms.ModelForm):
     """Public creation form.
 
-    Deliberately excludes instagram_text / telegram_text / facebook_text /
-    common_social_text — those are admin-only fields per the brief.
+    Deliberately excludes meta_text / telegram_text / common_social_text —
+    those are admin-only fields per the brief. price_amount/price_currency
+    are included and required whenever send_to_marketplace is checked: the
+    marketplace listing needs a price, and it's never safe to let AI invent
+    one for a real listing.
     """
 
     attachments = MultiFileField(
@@ -38,7 +41,7 @@ class PostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ["text", "internal_comment", "send_to_marketplace"]
+        fields = ["text", "price_amount", "price_currency", "internal_comment", "send_to_marketplace"]
         widgets = {
             "text": forms.Textarea(attrs={"rows": 5}),
             "internal_comment": forms.Textarea(attrs={"rows": 3}),
@@ -46,6 +49,12 @@ class PostForm(forms.ModelForm):
         labels = {
             "send_to_marketplace": _("Отправлять в list.am/avito?"),
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data.get("send_to_marketplace") and not cleaned_data.get("price_amount"):
+            self.add_error("price_amount", _("Укажите цену — без неё пост нельзя отправить на list.am/avito."))
+        return cleaned_data
 
 
 class SalesPostForm(forms.ModelForm):

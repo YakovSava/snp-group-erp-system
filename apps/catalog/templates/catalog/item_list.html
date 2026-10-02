@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Каталог" %}{% endblock %}
+
+{% block content %}
+<div class="card" style="margin-top:16px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <h1>{% trans "Каталог" %}</h1>
+        <div style="display:flex; gap:10px;">
+            <a href="{% url 'catalog:export' %}" class="button">{% trans "Экспортировать" %}</a>
+            <a href="{% url 'catalog:import_upload' %}" class="button button--primary">{% trans "Импортировать" %}</a>
+        </div>
+    </div>
+
+    <form method="get" style="display:flex; gap:10px; align-items:flex-end; margin-top:16px; flex-wrap:wrap;">
+        <p style="margin:0; flex:1; min-width:200px;">
+            <label for="id_q">{{ form.q.label }}</label>
+            {{ form.q }}
+        </p>
+        <p style="margin:0;">
+            <label for="id_field">{{ form.field.label }}</label>
+            {{ form.field }}
+        </p>
+        <button type="submit" class="button">{% trans "Найти" %}</button>
+    </form>
+
+    <table style="margin-top:16px;">
+        <thead>
+            <tr>
+                <th>{% trans "Заголовок" %}</th>
+                <th>{% trans "Артикул" %}</th>
+                <th>{% trans "AMD" %}</th>
+                <th>{% trans "RUB" %}</th>
+                <th>{% trans "USD" %}</th>
+                <th>{% trans "Поставщик" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.title }}</td>
+                <td>{{ item.article }}</td>
+                <td>{{ item.amount_amd|default:"—" }}</td>
+                <td>{{ item.amount_rub|default:"—" }}</td>
+                <td>{{ item.amount_usd|default:"—" }}</td>
+                <td>{{ item.supplier|truncatechars:40 }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6">{% trans "Каталог пуст." %}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% include "_pagination.html" %}
+</div>
+{% endblock %}

@@ -16,12 +16,40 @@ def sales_attachment_path(instance, filename):
 class Post(models.Model):
     """Пост в социальных сетях."""
 
+    CURRENCY_AMD = "AMD"
+    CURRENCY_RUB = "RUB"
+    CURRENCY_USD = "USD"
+    CURRENCY_CHOICES = [
+        (CURRENCY_AMD, _("AMD (драм)")),
+        (CURRENCY_RUB, _("RUB (рубль)")),
+        (CURRENCY_USD, _("USD (доллар)")),
+    ]
+
     text = models.TextField(_("Основной текст"))
 
-    instagram_text = models.TextField(_("Текст для Instagram"), blank=True)
+    meta_text = models.TextField(
+        _("Текст для Facebook/Instagram (Meta)"),
+        blank=True,
+        help_text=_("Публикуется без изменений в Facebook и Instagram."),
+    )
     telegram_text = models.TextField(_("Текст для Telegram"), blank=True)
-    facebook_text = models.TextField(_("Текст для Facebook"), blank=True)
     common_social_text = models.TextField(_("Общий текст для соц.сетей"), blank=True)
+
+    price_amount = models.DecimalField(
+        _("Цена"),
+        max_digits=12,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        help_text=_("Обязательна, если пост попадёт в соц.сети или на list.am/avito."),
+    )
+    price_currency = models.CharField(
+        _("Валюта цены"),
+        max_length=3,
+        choices=CURRENCY_CHOICES,
+        default=CURRENCY_AMD,
+        blank=True,
+    )
 
     internal_comment = models.TextField(
         _("Внутренний комментарий"),

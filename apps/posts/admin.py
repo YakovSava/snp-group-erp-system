@@ -25,10 +25,11 @@ class PostAdmin(admin.ModelAdmin):
     inlines = [PostAttachmentInline, PostTranslationInline]
     fields = (
         "text",
-        "instagram_text",
+        "meta_text",
         "telegram_text",
-        "facebook_text",
         "common_social_text",
+        "price_amount",
+        "price_currency",
         "internal_comment",
         "send_to_marketplace",
         "created_by",

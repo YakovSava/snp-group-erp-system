@@ -20,6 +20,15 @@
             <label for="smm-description">{% trans "Описание товара" %}</label>
             <textarea name="description" id="smm-description" rows="3" required placeholder="{% trans 'Например: прокладки для системы охлаждения Volvo, оригинал, комплект 2 шт.' %}"></textarea>
         </p>
+        <p class="smm-price-row">
+            <label for="smm-form-price_amount">{% trans "Цена" %}</label>
+            <input type="number" name="price_amount" id="smm-form-price_amount" min="0" step="any" required placeholder="{% trans 'Например: 45000' %}">
+            <select name="price_currency" id="smm-form-price_currency" required>
+                <option value="AMD">AMD — {% trans "драм" %}</option>
+                <option value="RUB">RUB — {% trans "рубль" %}</option>
+                <option value="USD">USD — {% trans "доллар" %}</option>
+            </select>
+        </p>
         <button type="submit" class="button button--primary">{% trans "Сгенерировать черновик" %}</button>
     </form>
 
@@ -32,21 +41,27 @@
                 <img id="smm-draft-image" src="{% if draft %}{{ draft.image_url }}{% endif %}" alt="">
             </div>
             <div class="smm-draft__fields">
+                <p class="smm-price-row">
+                    <label for="smm-price_amount">{% trans "Цена" %}</label>
+                    <input type="number" id="smm-price_amount" min="0" step="any" value="{% if draft %}{{ draft.price_amount }}{% endif %}">
+                    <select id="smm-price_currency">
+                        <option value="AMD" {% if draft.price_currency == "AMD" %}selected{% endif %}>AMD — {% trans "драм" %}</option>
+                        <option value="RUB" {% if draft.price_currency == "RUB" %}selected{% endif %}>RUB — {% trans "рубль" %}</option>
+                        <option value="USD" {% if draft.price_currency == "USD" %}selected{% endif %}>USD — {% trans "доллар" %}</option>
+                    </select>
+                </p>
+                <p class="help-text">{% trans "Цену изменить здесь перед 'Улучшить ещё', чтобы она попала в пересчитанный текст." %}</p>
                 <p>
                     <label>{% trans "Основной текст" %}</label>
                     <textarea id="smm-post_text" rows="4">{% if draft %}{{ draft.post_text }}{% endif %}</textarea>
                 </p>
                 <p>
-                    <label>{% trans "Текст для Instagram" %}</label>
-                    <textarea id="smm-instagram_text" rows="3">{% if draft %}{{ draft.instagram_text }}{% endif %}</textarea>
+                    <label>{% trans "Текст для Facebook/Instagram (Meta)" %}</label>
+                    <textarea id="smm-meta_text" rows="8">{% if draft %}{{ draft.meta_text }}{% endif %}</textarea>
                 </p>
                 <p>
                     <label>{% trans "Текст для Telegram" %}</label>
                     <textarea id="smm-telegram_text" rows="3">{% if draft %}{{ draft.telegram_text }}{% endif %}</textarea>
-                </p>
-                <p>
-                    <label>{% trans "Текст для Facebook" %}</label>
-                    <textarea id="smm-facebook_text" rows="3">{% if draft %}{{ draft.facebook_text }}{% endif %}</textarea>
                 </p>
                 <p>
                     <label>{% trans "Общий текст для соц.сетей" %}</label>
@@ -83,6 +98,8 @@
 .smm-draft__refine { display: flex; gap: 10px; margin-top: 10px; }
 .smm-draft__refine input { flex: 1; }
 .smm-draft__actions { display: flex; gap: 10px; margin-top: 16px; }
+.smm-price-row { display: flex; gap: 10px; align-items: center; }
+.smm-price-row input, .smm-price-row select { width: auto; }
 </style>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
@@ -96,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var loading = document.getElementById("smm-loading");
     var errorBox = document.getElementById("smm-error");
 
-    var FIELD_IDS = ["post_text", "instagram_text", "telegram_text", "facebook_text", "common_social_text"];
+    var FIELD_IDS = ["post_text", "meta_text", "telegram_text", "common_social_text"];
 
     function showError(message) {
         errorBox.textContent = message;
@@ -108,6 +125,8 @@ document.addEventListener("DOMContentLoaded", function () {
         FIELD_IDS.forEach(function (field) {
             document.getElementById("smm-" + field).value = draft[field] || "";
         });
+        document.getElementById("smm-price_amount").value = draft.price_amount || "";
+        document.getElementById("smm-price_currency").value = draft.price_currency || "AMD";
         draftSection.style.display = "block";
         generateForm.style.display = "none";
     }
@@ -151,6 +170,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         var formData = new FormData();
         formData.append("refine_instructions", document.getElementById("smm-refine-input").value);
+        formData.append("price_amount", document.getElementById("smm-price_amount").value);
+        formData.append("price_currency", document.getElementById("smm-price_currency").value);
         postForm("{% url 'agent:smm_refine' %}", formData)
             .then(function (data) {
                 applyDraft(data.draft);
@@ -176,6 +197,8 @@ document.addEventListener("DOMContentLoaded", function () {
         FIELD_IDS.forEach(function (field) {
             formData.append(field, document.getElementById("smm-" + field).value);
         });
+        formData.append("price_amount", document.getElementById("smm-price_amount").value);
+        formData.append("price_currency", document.getElementById("smm-price_currency").value);
         if (document.getElementById("smm-send_to_marketplace").checked) {
             formData.append("send_to_marketplace", "on");
         }

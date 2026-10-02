@@ -61,6 +61,8 @@ def list_conversations(external_user_id: str) -> list:
 def generate_smm_draft(
     description: str,
     image_bytes: bytes,
+    price_amount: str,
+    price_currency: str,
     filename: str = "photo.jpg",
     refine_instructions: str = "",
 ) -> dict:
@@ -71,10 +73,19 @@ def generate_smm_draft(
     image, refine_instructions = the user's extra instructions) — ai-assistant
     doesn't track draft state itself, so Django resends whatever the current
     image is each time.
+
+    price_amount/price_currency are entered by the employee (never guessed by
+    the AI) and must end up in every generated text — a post without a price
+    is not allowed to go out.
     """
     response = httpx.post(
         f"{settings.AI_ASSISTANT_BASE_URL}/v1/smm/draft",
-        data={"description": description, "refine_instructions": refine_instructions},
+        data={
+            "description": description,
+            "refine_instructions": refine_instructions,
+            "price_amount": price_amount,
+            "price_currency": price_currency,
+        },
         files={"image": (filename, image_bytes, "image/jpeg")},
         headers=_headers(),
         # Two sequential gateway calls (image edit, then vision copy
@@ -82,6 +93,48 @@ def generate_smm_draft(
         # backoff per retry when the gateway asks for it — worst case is
         # comfortably under this.
         timeout=220.0,
+    )
+    response.raise_for_status()
+    return response.json()
+
+
+def convert_currency(amount: float, from_currency: str, to_currency: str) -> float:
+    response = httpx.post(
+        f"{settings.AI_ASSISTANT_BASE_URL}/v1/convert-currency",
+        json={"amount": amount, "from_currency": from_currency, "to_currency": to_currency},
+        headers=_headers(),
+        timeout=DEFAULT_TIMEOUT,
+    )
+    response.raise_for_status()
+    return response.json()["result"]["converted_amount"]
+
+
+def generate_sales_title(text: str) -> str:
+    """Asks ai-assistant for a short list.am/avito-style card title derived
+    from a post's text — used by apps.posts.tasks.create_sales_post_from_post
+    instead of a hardcoded placeholder.
+    """
+    response = httpx.post(
+        f"{settings.AI_ASSISTANT_BASE_URL}/v1/smm/sales-title",
+        json={"text": text},
+        headers=_headers(),
+        timeout=DEFAULT_TIMEOUT,
+    )
+    response.raise_for_status()
+    return response.json()["title"]
+
+
+def suggest_catalog_mapping(headers: list[str], sample_rows: list[list[str]]) -> dict:
+    """Asks ai-assistant which catalog field each spreadsheet column likely
+    maps to, from its header + a few sample rows. Never trusted blindly —
+    apps.catalog shows this as an editable suggestion for the employee to
+    confirm before importing anything.
+    """
+    response = httpx.post(
+        f"{settings.AI_ASSISTANT_BASE_URL}/v1/catalog/import-mapping",
+        json={"headers": headers, "sample_rows": sample_rows},
+        headers=_headers(),
+        timeout=DEFAULT_TIMEOUT,
     )
     response.raise_for_status()
     return response.json()

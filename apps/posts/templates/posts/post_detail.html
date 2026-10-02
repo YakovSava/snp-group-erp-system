@@ -10,10 +10,24 @@
     <h1>{% trans "Пост" %} #{{ post.pk }}</h1>
     <p>{{ post.text|linebreaks }}</p>
 
+    {% if post.price_amount %}
+    <p><strong>{% trans "Цена" %}:</strong> {{ post.price_amount }} {{ post.price_currency }}</p>
+    {% endif %}
+
     <p>
         <strong>{% trans "Отправлять в list.am/avito?" %}</strong>
         {% if post.send_to_marketplace %}{% trans "Да" %}{% else %}{% trans "Нет" %}{% endif %}
     </p>
+
+    {% if post.meta_text %}
+    <h3>{% trans "Текст для Facebook/Instagram (Meta)" %}</h3>
+    <p>{{ post.meta_text|linebreaks }}</p>
+    {% endif %}
+
+    {% if post.telegram_text %}
+    <h3>{% trans "Текст для Telegram" %}</h3>
+    <p>{{ post.telegram_text|linebreaks }}</p>
+    {% endif %}
 
     {% if post.attachments.all %}
     <h3>{% trans "Приложения" %}</h3>

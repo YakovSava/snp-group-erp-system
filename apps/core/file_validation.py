@@ -21,6 +21,10 @@ SALES_ATTACHMENT_MIMES = {
     "image/jpeg": "jpeg",
 }
 
+CATALOG_IMPORT_MIMES = {
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xlsx",
+}
+
 
 def sniff_mime(django_file) -> str:
     """Returns the real MIME type of an uploaded file by inspecting its bytes."""
@@ -50,4 +54,12 @@ def validate_sales_attachment(django_file):
         django_file,
         SALES_ATTACHMENT_MIMES,
         _("Недопустимый тип файла (%(mime)s). Разрешён только JPEG."),
+    )
+
+
+def validate_catalog_import(django_file):
+    return validate_against(
+        django_file,
+        CATALOG_IMPORT_MIMES,
+        _("Недопустимый тип файла (%(mime)s). Разрешён только Excel (.xlsx)."),
     )

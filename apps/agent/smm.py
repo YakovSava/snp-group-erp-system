@@ -19,7 +19,8 @@ from apps.posts.models import Post, PostAttachment
 SESSION_DRAFT_KEY = "smm_draft"
 DRAFT_SUBDIR = "smm_drafts"
 
-DRAFT_TEXT_FIELDS = ["post_text", "instagram_text", "telegram_text", "facebook_text", "common_social_text"]
+DRAFT_TEXT_FIELDS = ["post_text", "meta_text", "telegram_text", "common_social_text"]
+VALID_CURRENCIES = ("AMD", "RUB", "USD")
 
 
 def _draft_abspath(relative_path):
@@ -55,17 +56,47 @@ def smm_tool_page(request):
     return render(request, "agent/smm_tool.html", {"draft": _draft_payload(draft) if draft else None})
 
 
+def _parse_price(request):
+    """Returns (amount_str, currency, error_message). Price is mandatory —
+    a priced post can't be generated without it, and callers must surface
+    error_message to the user rather than falling back to a guess.
+
+    amount_str is kept as a (normalized) string rather than a float: it's
+    only ever displayed or sent back out over HTTP, and this sidesteps
+    float formatting surprises (e.g. "45000.0") in the generated copy.
+    """
+    price_amount = request.POST.get("price_amount", "").strip().replace(",", ".")
+    price_currency = request.POST.get("price_currency", "").strip().upper()
+    if not price_amount or price_currency not in VALID_CURRENCIES:
+        return None, None, _("Укажите цену товара и валюту.")
+    try:
+        amount = float(price_amount)
+    except ValueError:
+        return None, None, _("Цена должна быть числом.")
+    if amount <= 0:
+        return None, None, _("Цена должна быть больше нуля.")
+    normalized = f"{amount:.0f}" if amount == int(amount) else f"{amount:g}"
+    return normalized, price_currency, None
+
+
 @login_required
 @require_POST
 def smm_generate(request):
     description = request.POST.get("description", "").strip()
     photo = request.FILES.get("photo")
+    price_amount, price_currency, price_error = _parse_price(request)
     if not description or not photo:
         return JsonResponse({"error": _("Нужны и фото, и описание товара.")}, status=400)
+    if price_error:
+        return JsonResponse({"error": price_error}, status=400)
 
     try:
         result = ai_client.generate_smm_draft(
-            description=description, image_bytes=photo.read(), filename=photo.name
+            description=description,
+            image_bytes=photo.read(),
+            price_amount=price_amount,
+            price_currency=price_currency,
+            filename=photo.name,
         )
     except httpx.HTTPError:
         return JsonResponse({"error": _("AI-ассистент временно недоступен. Попробуйте позже.")}, status=502)
@@ -73,7 +104,12 @@ def smm_generate(request):
     _discard_draft(request)
     relative_path = _save_draft_image(base64.b64decode(result["image_b64"]))
 
-    draft = {"image_path": relative_path, "description": description}
+    draft = {
+        "image_path": relative_path,
+        "description": description,
+        "price_amount": price_amount,
+        "price_currency": price_currency,
+    }
     draft.update({field: result[field] for field in DRAFT_TEXT_FIELDS})
     request.session[SESSION_DRAFT_KEY] = draft
 
@@ -88,6 +124,15 @@ def smm_refine(request):
         return JsonResponse({"error": _("Сначала создайте черновик.")}, status=400)
 
     refine_instructions = request.POST.get("refine_instructions", "").strip()
+    # Price can be corrected before asking for another round — if the
+    # employee didn't touch it, reuse what's already on the draft.
+    if request.POST.get("price_amount"):
+        price_amount, price_currency, price_error = _parse_price(request)
+        if price_error:
+            return JsonResponse({"error": price_error}, status=400)
+    else:
+        price_amount, price_currency = draft["price_amount"], draft["price_currency"]
+
     with open(_draft_abspath(draft["image_path"]), "rb") as fh:
         current_bytes = fh.read()
 
@@ -95,6 +140,8 @@ def smm_refine(request):
         result = ai_client.generate_smm_draft(
             description=draft["description"],
             image_bytes=current_bytes,
+            price_amount=price_amount,
+            price_currency=price_currency,
             filename="draft.jpg",
             refine_instructions=refine_instructions,
         )
@@ -109,6 +156,8 @@ def smm_refine(request):
         pass
 
     draft["image_path"] = new_relative_path
+    draft["price_amount"] = price_amount
+    draft["price_currency"] = price_currency
     draft.update({field: result[field] for field in DRAFT_TEXT_FIELDS})
     request.session[SESSION_DRAFT_KEY] = draft
 
@@ -134,10 +183,11 @@ def smm_accept(request):
     with transaction.atomic():
         post = Post.objects.create(
             text=request.POST.get("post_text", draft["post_text"]),
-            instagram_text=request.POST.get("instagram_text", draft["instagram_text"]),
+            meta_text=request.POST.get("meta_text", draft["meta_text"]),
             telegram_text=request.POST.get("telegram_text", draft["telegram_text"]),
-            facebook_text=request.POST.get("facebook_text", draft["facebook_text"]),
             common_social_text=request.POST.get("common_social_text", draft["common_social_text"]),
+            price_amount=request.POST.get("price_amount", draft["price_amount"]),
+            price_currency=request.POST.get("price_currency", draft["price_currency"]),
             send_to_marketplace=send_to_marketplace,
             created_by=request.user,
         )

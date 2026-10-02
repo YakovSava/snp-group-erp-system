@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Импорт каталога" %}{% endblock %}
+
+{% block content %}
+<div class="card" style="margin-top:16px; max-width:640px;">
+    <h1>{% trans "Импорт каталога" %}</h1>
+    <p class="help-text">{% trans "Загрузите прайс-лист поставщика (.xlsx) — AI предложит, какой столбец что означает, вы сможете проверить и поправить это перед импортом." %}</p>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="button button--primary">{% trans "Загрузить и определить столбцы" %}</button>
+    </form>
+</div>
+{% endblock %}
