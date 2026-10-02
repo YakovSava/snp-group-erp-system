@@ -11,7 +11,13 @@ COLLECTION_NAME = "company_knowledge"
 @lru_cache
 def _client():
     settings = get_settings()
-    return chromadb.PersistentClient(path=settings.chroma_path)
+    # anonymized_telemetry=False: Chroma's own analytics call errors on this
+    # chromadb/posthog version pairing ("capture() takes 1 positional
+    # argument but 3 were given") — harmless but noisy on every query/insert.
+    return chromadb.PersistentClient(
+        path=settings.chroma_path,
+        settings=chromadb.Settings(anonymized_telemetry=False),
+    )
 
 
 def _collection():

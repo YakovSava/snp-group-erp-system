@@ -31,7 +31,14 @@ class Message(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     conversation_id: Mapped[int] = mapped_column(ForeignKey("conversations.id", ondelete="CASCADE"), index=True)
-    role: Mapped[MessageRole] = mapped_column(Enum(MessageRole, name="message_role"))
+    # values_callable: without it, SQLAlchemy stores the enum MEMBER NAME
+    # ("USER") rather than its value ("user") — but the Postgres enum type
+    # (see migrations/versions/0001_initial.py) was created with the lowercase
+    # values, so every insert failed with "invalid input value for enum
+    # message_role: USER" until this was added.
+    role: Mapped[MessageRole] = mapped_column(
+        Enum(MessageRole, name="message_role", values_callable=lambda enum_cls: [e.value for e in enum_cls])
+    )
     content: Mapped[str] = mapped_column(Text)
     created_at: Mapped[datetime.datetime] = mapped_column(
         DateTime(timezone=True), default=lambda: datetime.datetime.now(datetime.timezone.utc)
