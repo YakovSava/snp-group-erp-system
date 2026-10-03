@@ -157,6 +157,38 @@ textarea { min-height: 100px; }
 .badge--done { background: #DCF4E0; color: var(--color-success); }
 .badge--failed { background: #FBDCD9; color: var(--color-danger); }
 
+.attachment-gallery { display: flex; gap: 10px; flex-wrap: wrap; }
+.attachment-thumb {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: var(--radius);
+    border: 1px solid var(--color-gray-300);
+    cursor: zoom-in;
+}
+
+.lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.lightbox__img { max-width: 90vw; max-height: 90vh; border-radius: var(--radius); }
+.lightbox__close {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    background: none;
+    border: none;
+    color: var(--color-white);
+    font-size: 2em;
+    line-height: 1;
+    cursor: pointer;
+}
+
 body.auth-body { background: var(--color-black); }
 body.auth-body .page { padding: 0; max-width: none; }
 

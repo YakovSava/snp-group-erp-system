@@ -8,13 +8,14 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views import View
-from django.views.generic import FormView, ListView
+from django.views.generic import CreateView, DeleteView, DetailView, FormView, ListView, UpdateView
 
 from apps.core import ai_client
 
-from .forms import CatalogImportUploadForm, CatalogMappingForm, CatalogSearchForm
+from .forms import CatalogImportUploadForm, CatalogItemForm, CatalogMappingForm, CatalogSearchForm
 from .models import CatalogItem
 from .services import excel
 
@@ -86,6 +87,51 @@ class CatalogItemListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context["form"] = self.form
         return context
+
+
+class CatalogItemDetailView(LoginRequiredMixin, DetailView):
+    model = CatalogItem
+    template_name = "catalog/item_detail.html"
+    context_object_name = "item"
+
+
+class CatalogItemCreateView(LoginRequiredMixin, CreateView):
+    model = CatalogItem
+    form_class = CatalogItemForm
+    template_name = "catalog/item_form.html"
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        response = super().form_valid(form)
+        messages.success(self.request, _("Позиция каталога создана."))
+        return response
+
+    def get_success_url(self):
+        return reverse("catalog:item_detail", args=[self.object.pk])
+
+
+class CatalogItemUpdateView(LoginRequiredMixin, UpdateView):
+    model = CatalogItem
+    form_class = CatalogItemForm
+    template_name = "catalog/item_form.html"
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, _("Позиция каталога обновлена."))
+        return response
+
+    def get_success_url(self):
+        return reverse("catalog:item_detail", args=[self.object.pk])
+
+
+class CatalogItemDeleteView(LoginRequiredMixin, DeleteView):
+    model = CatalogItem
+    template_name = "catalog/item_confirm_delete.html"
+    context_object_name = "item"
+
+    def get_success_url(self):
+        messages.success(self.request, _("Позиция каталога удалена."))
+        return reverse("catalog:item_list")
 
 
 class CatalogExportView(LoginRequiredMixin, View):

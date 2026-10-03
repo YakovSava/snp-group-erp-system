@@ -15,6 +15,7 @@
     <table>
         <thead>
             <tr>
+                <th>{% trans "Фото" %}</th>
                 <th>{% trans "Заголовок" %}</th>
                 <th>{% trans "Цена (AMD)" %}</th>
                 <th>{% trans "Автоматически" %}</th>
@@ -24,13 +25,22 @@
         <tbody>
             {% for sales_post in sales_posts %}
             <tr>
+                <td>
+                    {% with thumb=sales_post.attachments.all|first %}
+                    {% if thumb %}
+                        <img class="attachment-thumb js-attachment-thumb" style="width:48px; height:48px;" src="{{ thumb.file.url }}" data-full="{{ thumb.file.url }}" alt="">
+                    {% else %}
+                        —
+                    {% endif %}
+                    {% endwith %}
+                </td>
                 <td><a href="{% url 'posts:salespost_detail' sales_post.pk %}">{{ sales_post.title }}</a></td>
                 <td>{{ sales_post.price_amd }}</td>
                 <td>{% if sales_post.is_auto_generated %}✓{% else %}—{% endif %}</td>
                 <td>{{ sales_post.created_at }}</td>
             </tr>
             {% empty %}
-            <tr><td colspan="4">{% trans "Постов пока нет." %}</td></tr>
+            <tr><td colspan="5">{% trans "Постов пока нет." %}</td></tr>
             {% endfor %}
         </tbody>
     </table>

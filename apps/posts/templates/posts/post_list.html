@@ -15,6 +15,7 @@
     <table>
         <thead>
             <tr>
+                <th>{% trans "Фото" %}</th>
                 <th>{% trans "Текст" %}</th>
                 <th>{% trans "list.am/avito" %}</th>
                 <th>{% trans "Автор" %}</th>
@@ -24,13 +25,28 @@
         <tbody>
             {% for post in posts %}
             <tr>
+                <td>
+                    {% with thumb=post.attachments.all|first %}
+                    {% if thumb %}
+                        {% with ext=thumb.file.name|lower|slice:"-4:" %}
+                        {% if ext == ".mp4" or ext == ".mov" %}
+                            <video class="attachment-thumb" style="width:48px; height:48px;" src="{{ thumb.file.url }}" muted></video>
+                        {% else %}
+                            <img class="attachment-thumb js-attachment-thumb" style="width:48px; height:48px;" src="{{ thumb.file.url }}" data-full="{{ thumb.file.url }}" alt="">
+                        {% endif %}
+                        {% endwith %}
+                    {% else %}
+                        —
+                    {% endif %}
+                    {% endwith %}
+                </td>
                 <td><a href="{% url 'posts:post_detail' post.pk %}">{{ post.text|truncatechars:80 }}</a></td>
                 <td>{% if post.send_to_marketplace %}✓{% else %}—{% endif %}</td>
                 <td>{{ post.created_by }}</td>
                 <td>{{ post.created_at }}</td>
             </tr>
             {% empty %}
-            <tr><td colspan="4">{% trans "Постов пока нет." %}</td></tr>
+            <tr><td colspan="5">{% trans "Постов пока нет." %}</td></tr>
             {% endfor %}
         </tbody>
     </table>

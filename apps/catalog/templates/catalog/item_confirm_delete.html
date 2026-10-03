@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Удалить позицию" %}{% endblock %}
+
+{% block content %}
+<div class="card" style="margin-top:16px; max-width:640px;">
+    <h1>{% trans "Удалить позицию" %}</h1>
+    <p>{% blocktrans with title=item.title %}Удалить «{{ title }}» из каталога? Это действие необратимо.{% endblocktrans %}</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="button button--danger">{% trans "Удалить" %}</button>
+        <a href="{% url 'catalog:item_detail' item.pk %}" class="button">{% trans "Отмена" %}</a>
+    </form>
+</div>
+{% endblock %}

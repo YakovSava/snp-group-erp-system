@@ -170,7 +170,6 @@ msgstr "Generate draft"
 
 msgid "Обрабатываем фото и готовим текст — это может занять около минуты..."
 msgstr "Processing the photo and preparing the text — this may take about a minute..."
-"Processing the photo and preparing the text — this may take about a minute..."
 
 msgid ""
 "Цену изменить здесь перед 'Улучшить ещё', чтобы она попала в пересчитанный "

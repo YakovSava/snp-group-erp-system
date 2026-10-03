@@ -17,9 +17,9 @@
 
     {% if sales_post.attachments.all %}
     <h3>{% trans "Приложения" %}</h3>
-    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+    <div class="attachment-gallery">
         {% for attachment in sales_post.attachments.all %}
-            <img src="{{ attachment.file.url }}" alt="" style="max-width:160px; border-radius:8px;">
+            <img class="attachment-thumb js-attachment-thumb" src="{{ attachment.file.url }}" data-full="{{ attachment.file.url }}" alt="">
         {% endfor %}
     </div>
     {% endif %}

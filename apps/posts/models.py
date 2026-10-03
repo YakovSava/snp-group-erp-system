@@ -98,6 +98,35 @@ class PostAttachment(models.Model):
         return self.file.name
 
 
+class PostPublication(models.Model):
+    """One send attempt of a Post to one social network, as reported back
+    by the social-publisher microservice (see apps.core.social_client)."""
+
+    STATUS_SUCCESS = "success"
+    STATUS_ERROR = "error"
+    STATUS_SKIPPED = "skipped_unconfigured"
+    STATUS_CHOICES = [
+        (STATUS_SUCCESS, _("Опубликовано")),
+        (STATUS_ERROR, _("Ошибка")),
+        (STATUS_SKIPPED, _("Пропущено (нет токена)")),
+    ]
+
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="publications")
+    platform = models.CharField(_("Платформа"), max_length=20)
+    status = models.CharField(_("Статус"), max_length=20, choices=STATUS_CHOICES)
+    detail = models.TextField(_("Подробности"), blank=True)
+    external_url = models.URLField(_("Ссылка на публикацию"), blank=True)
+    created_at = models.DateTimeField(_("Отправлено"), auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = _("Публикация в соц.сети")
+        verbose_name_plural = _("Публикации в соц.сетях")
+
+    def __str__(self):
+        return f"{self.post_id} -> {self.platform}: {self.status}"
+
+
 class PostTranslation(models.Model):
     """AI-generated localized copy of Post.text, created automatically on
     Post creation by apps.posts.tasks.localize_post. 'ru' isn't stored here

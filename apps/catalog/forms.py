@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.core.file_validation import validate_catalog_import
 
+from .models import CatalogItem
 from .services.excel import SINGLE_VALUE_FIELDS
 
 COLUMN_FIELD_CHOICES = [
@@ -92,6 +93,12 @@ class CatalogMappingForm(forms.Form):
     def column_rows(self):
         """(header, bound_field) pairs for straightforward template rendering."""
         return [(header, self[f"column_{idx}"]) for idx, header in enumerate(self.headers)]
+
+
+class CatalogItemForm(forms.ModelForm):
+    class Meta:
+        model = CatalogItem
+        fields = ["title", "article", "amount_amd", "amount_rub", "amount_usd", "description", "supplier", "comment"]
 
 
 class CatalogSearchForm(forms.Form):

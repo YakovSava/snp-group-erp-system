@@ -42,3 +42,7 @@ Password login always works. A signed-in user can add a PassKey for this device 
 It's reached at `AI_ASSISTANT_BASE_URL` with a `AI_ASSISTANT_SERVICE_TOKEN` matching ai-assistant's `SERVICE_TOKEN` — both already set to matching dev defaults in the included `.env` files. Django only ever proxies to it; the browser never talks to ai-assistant directly.
 
 **Running them apart instead** (e.g. deploying ai-assistant on a different host): run `cd ai-assistant && docker compose up --build` on its own there, and point this project's `AI_ASSISTANT_BASE_URL` at wherever it's reachable from — `http://host.docker.internal:8001` if it's a separately-started stack on the same machine (add back `extra_hosts: ["host.docker.internal:host-gateway"]` on the `web`/`celery_worker` services in that case), or its real network address otherwise.
+
+## social-publisher
+
+Publishing a Post to Facebook, Instagram, Telegram, Threads, X, VK and MAX is powered by the separate `social-publisher/` service — see `social-publisher/README.md`. Also started automatically via `include:`, reached at `SOCIAL_PUBLISHER_BASE_URL` with a `SOCIAL_PUBLISHER_SERVICE_TOKEN` matching its `SERVICE_TOKEN`. The "Отправить во все соцсети" button on a post's detail page calls it; any platform with no credentials configured in `social-publisher/.env` is simply skipped, the rest still go out.

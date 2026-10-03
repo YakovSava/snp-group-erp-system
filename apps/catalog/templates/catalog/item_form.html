@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% if object %}{% trans "Редактировать позицию" %}{% else %}{% trans "Новая позиция каталога" %}{% endif %}{% endblock %}
+
+{% block content %}
+<div class="card" style="margin-top:16px; max-width:640px;">
+    <h1>{% if object %}{% trans "Редактировать позицию" %}{% else %}{% trans "Новая позиция каталога" %}{% endif %}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="button button--primary">{% trans "Сохранить" %}</button>
+        {% if object %}
+            <a href="{% url 'catalog:item_detail' object.pk %}" class="button">{% trans "Отмена" %}</a>
+        {% else %}
+            <a href="{% url 'catalog:item_list' %}" class="button">{% trans "Отмена" %}</a>
+        {% endif %}
+    </form>
+</div>
+{% endblock %}

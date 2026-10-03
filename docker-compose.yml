@@ -2,6 +2,9 @@ include:
   - path: ai-assistant/docker-compose.yml
     project_directory: ai-assistant
     env_file: ai-assistant/.env
+  - path: social-publisher/docker-compose.yml
+    project_directory: social-publisher
+    env_file: social-publisher/.env
 
 services:
   db:
@@ -58,6 +61,8 @@ services:
       redis:
         condition: service_healthy
       api:
+        condition: service_healthy
+      publisher:
         condition: service_healthy
 
   celery_worker:

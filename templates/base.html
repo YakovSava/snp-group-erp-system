@@ -50,5 +50,46 @@
 <main class="page">
     {% block content %}{% endblock %}
 </main>
+
+<div id="lightbox" class="lightbox" hidden>
+    <button type="button" class="lightbox__close" aria-label="{% trans 'Закрыть' %}">&times;</button>
+    <img id="lightbox-img" class="lightbox__img" src="" alt="">
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var lightbox = document.getElementById("lightbox");
+    var lightboxImg = document.getElementById("lightbox-img");
+
+    function openLightbox(src) {
+        lightboxImg.src = src;
+        lightbox.hidden = false;
+    }
+
+    function closeLightbox() {
+        lightbox.hidden = true;
+        lightboxImg.src = "";
+    }
+
+    document.addEventListener("click", function (event) {
+        var thumb = event.target.closest(".js-attachment-thumb");
+        if (thumb) {
+            event.preventDefault();
+            openLightbox(thumb.dataset.full || thumb.src);
+        }
+    });
+
+    lightbox.addEventListener("click", function (event) {
+        if (event.target === lightbox || event.target.classList.contains("lightbox__close")) {
+            closeLightbox();
+        }
+    });
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && !lightbox.hidden) {
+            closeLightbox();
+        }
+    });
+});
+</script>
 </body>
 </html>

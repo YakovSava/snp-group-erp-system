@@ -153,6 +153,17 @@ WEBAUTHN_ORIGIN = env("WEBAUTHN_ORIGIN", default="http://localhost:8000")
 AI_ASSISTANT_BASE_URL = env("AI_ASSISTANT_BASE_URL", default="http://api:8000")
 AI_ASSISTANT_SERVICE_TOKEN = env("AI_ASSISTANT_SERVICE_TOKEN", default="dev-only-shared-token-7f3a9c1e5b8d2f6a")
 
+# --- social-publisher (separate service, see /social-publisher) -------------
+
+SOCIAL_PUBLISHER_BASE_URL = env("SOCIAL_PUBLISHER_BASE_URL", default="http://publisher:8000")
+SOCIAL_PUBLISHER_SERVICE_TOKEN = env(
+    "SOCIAL_PUBLISHER_SERVICE_TOKEN", default="dev-only-shared-token-9d4f2a7c1e6b8d3f"
+)
+# Base URL other services use to fetch this site's /media/ files. Must be a
+# real public domain in production — Facebook/Instagram/Threads fetch post
+# images from their own servers, not over the Docker network.
+SITE_BASE_URL = env("SITE_BASE_URL", default="http://web:8000")
+
 # --- DRF ---------------------------------------------------------------------
 
 REST_FRAMEWORK = {

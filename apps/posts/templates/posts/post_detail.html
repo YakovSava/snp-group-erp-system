@@ -31,9 +31,15 @@
 
     {% if post.attachments.all %}
     <h3>{% trans "Приложения" %}</h3>
-    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+    <div class="attachment-gallery">
         {% for attachment in post.attachments.all %}
-            <a href="{{ attachment.file.url }}" target="_blank">{{ attachment.file.name }}</a>
+            {% with ext=attachment.file.name|lower|slice:"-4:" %}
+            {% if ext == ".mp4" or ext == ".mov" %}
+                <video class="attachment-thumb" src="{{ attachment.file.url }}" controls></video>
+            {% else %}
+                <img class="attachment-thumb js-attachment-thumb" src="{{ attachment.file.url }}" data-full="{{ attachment.file.url }}" alt="">
+            {% endif %}
+            {% endwith %}
         {% endfor %}
     </div>
     {% endif %}
@@ -45,6 +51,35 @@
             <li><a href="{% url 'posts:salespost_detail' sales_post.pk %}">{{ sales_post.title }}</a></li>
         {% endfor %}
     </ul>
+    {% endif %}
+
+    <h3>{% trans "Публикация в соц.сетях" %}</h3>
+    <form method="post" action="{% url 'posts:post_publish' post.pk %}">
+        {% csrf_token %}
+        <button type="submit">{% trans "Отправить во все соцсети" %}</button>
+    </form>
+
+    {% if post.publications.all %}
+    <table style="margin-top:12px; width:100%;">
+        <thead>
+            <tr>
+                <th>{% trans "Платформа" %}</th>
+                <th>{% trans "Статус" %}</th>
+                <th>{% trans "Ссылка" %}</th>
+                <th>{% trans "Отправлено" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for publication in post.publications.all %}
+            <tr>
+                <td>{{ publication.platform }}</td>
+                <td>{{ publication.get_status_display }}</td>
+                <td>{% if publication.external_url %}<a href="{{ publication.external_url }}" target="_blank">{% trans "Открыть" %}</a>{% endif %}</td>
+                <td>{{ publication.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     {% endif %}
 </div>
 {% endblock %}

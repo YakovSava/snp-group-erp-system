@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ item.title }}{% endblock %}
+
+{% block content %}
+<div class="card" style="margin-top:16px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <h1>{{ item.title }}</h1>
+        <div style="display:flex; gap:10px;">
+            <a href="{% url 'catalog:item_edit' item.pk %}" class="button">{% trans "Редактировать" %}</a>
+            <a href="{% url 'catalog:item_delete' item.pk %}" class="button button--danger">{% trans "Удалить" %}</a>
+        </div>
+    </div>
+
+    <p><strong>{% trans "Артикул" %}:</strong> {{ item.article|default:"—" }}</p>
+    <p><strong>{% trans "Цена, AMD" %}:</strong> {{ item.amount_amd|default:"—" }}</p>
+    <p><strong>{% trans "Цена, RUB" %}:</strong> {{ item.amount_rub|default:"—" }}</p>
+    <p><strong>{% trans "Цена, USD" %}:</strong> {{ item.amount_usd|default:"—" }}</p>
+    <p><strong>{% trans "Поставщик" %}:</strong> {{ item.supplier|default:"—"|linebreaks }}</p>
+
+    {% if item.description %}
+    <h3>{% trans "Описание" %}</h3>
+    <p>{{ item.description|linebreaks }}</p>
+    {% endif %}
+
+    {% if item.comment %}
+    <h3>{% trans "Комментарии" %}</h3>
+    <p>{{ item.comment|linebreaks }}</p>
+    {% endif %}
+
+    <p class="help-text">
+        {% trans "Создан" %}: {{ item.created_at }} ({{ item.created_by|default:"—" }}) ·
+        {% trans "Обновлён" %}: {{ item.updated_at }}
+    </p>
+
+    <a href="{% url 'catalog:item_list' %}" class="button">{% trans "К списку" %}</a>
+</div>
+{% endblock %}
