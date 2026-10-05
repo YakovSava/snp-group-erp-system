@@ -1,6 +1,5 @@
-import httpx
-
 from ..config import Settings
+from ..http_client import new_async_client
 from ..schemas import PublishRequest, PublishResult
 from .base import SocialPublisher
 
@@ -14,6 +13,7 @@ class FacebookPublisher(SocialPublisher):
     platform = "facebook"
 
     def __init__(self, settings: Settings):
+        self._settings = settings
         self._page_id = settings.facebook_page_id
         self._token = settings.facebook_page_access_token
 
@@ -23,7 +23,7 @@ class FacebookPublisher(SocialPublisher):
     async def publish(self, request: PublishRequest) -> PublishResult:
         text = request.text_for(self.platform)
 
-        async with httpx.AsyncClient(timeout=30.0) as client:
+        async with new_async_client(self._settings, timeout=30.0) as client:
             if request.media_urls:
                 response = await client.post(
                     f"{GRAPH_BASE}/{self._page_id}/photos",

@@ -1,6 +1,5 @@
-import httpx
-
 from ..config import Settings
+from ..http_client import new_async_client
 from ..schemas import PublishRequest, PublishResult
 from .base import SocialPublisher
 
@@ -18,6 +17,7 @@ class MaxPublisher(SocialPublisher):
     platform = "max"
 
     def __init__(self, settings: Settings):
+        self._settings = settings
         self._token = settings.max_bot_token
         self._chat_id = settings.max_chat_id
 
@@ -31,7 +31,7 @@ class MaxPublisher(SocialPublisher):
             "attachments": [{"type": "image", "payload": {"url": url}} for url in request.media_urls],
         }
 
-        async with httpx.AsyncClient(timeout=30.0) as client:
+        async with new_async_client(self._settings, timeout=30.0) as client:
             response = await client.post(
                 f"{API_BASE}/messages",
                 params={"access_token": self._token, "chat_id": self._chat_id},

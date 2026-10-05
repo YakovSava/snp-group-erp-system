@@ -1,6 +1,5 @@
-import httpx
-
 from ..config import Settings
+from ..http_client import new_async_client
 from ..schemas import PublishRequest, PublishResult
 from .base import SocialPublisher
 
@@ -11,6 +10,7 @@ class TelegramPublisher(SocialPublisher):
     platform = "telegram"
 
     def __init__(self, settings: Settings):
+        self._settings = settings
         self._token = settings.telegram_bot_token
         self._chat_id = settings.telegram_chat_id
 
@@ -21,7 +21,7 @@ class TelegramPublisher(SocialPublisher):
         text = request.text_for(self.platform)
         base = f"{API_BASE}/bot{self._token}"
 
-        async with httpx.AsyncClient(timeout=30.0) as client:
+        async with new_async_client(self._settings, timeout=30.0) as client:
             if not request.media_urls:
                 response = await client.post(
                     f"{base}/sendMessage",

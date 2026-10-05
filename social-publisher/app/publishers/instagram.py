@@ -1,6 +1,5 @@
-import httpx
-
 from ..config import Settings
+from ..http_client import new_async_client
 from ..schemas import PublishRequest, PublishResult
 from .base import SocialPublisher
 
@@ -14,6 +13,7 @@ class InstagramPublisher(SocialPublisher):
     platform = "instagram"
 
     def __init__(self, settings: Settings):
+        self._settings = settings
         self._ig_user_id = settings.instagram_business_account_id
         self._token = settings.instagram_access_token
 
@@ -30,7 +30,7 @@ class InstagramPublisher(SocialPublisher):
 
         text = request.text_for(self.platform)
 
-        async with httpx.AsyncClient(timeout=30.0) as client:
+        async with new_async_client(self._settings, timeout=30.0) as client:
             container = await client.post(
                 f"{GRAPH_BASE}/{self._ig_user_id}/media",
                 data={"image_url": request.media_urls[0], "caption": text, "access_token": self._token},

@@ -8,6 +8,13 @@ class Settings(BaseSettings):
 
     service_token: str = "change-me"
 
+    # Outbound HTTP proxy for every publisher's requests to the social
+    # networks themselves (not for the FastAPI server). Needed when the host
+    # can't reach Meta/Telegram/X/VK directly. Any URL httpx accepts, e.g.
+    # http://user:pass@host:port or socks5://host:port (the [socks] extra of
+    # httpx must then be installed). Empty means connect directly.
+    outbound_proxy_url: str = ""
+
     # Facebook (Meta Graph API) — a Page and a Page access token with
     # pages_manage_posts. Posting to a personal profile isn't supported by
     # the Graph API, only to Pages.

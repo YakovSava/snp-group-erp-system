@@ -1,6 +1,7 @@
 import httpx
 
 from ..config import Settings
+from ..http_client import new_async_client
 from ..schemas import PublishRequest, PublishResult
 from .base import SocialPublisher
 
@@ -17,6 +18,7 @@ class VkPublisher(SocialPublisher):
     platform = "vk"
 
     def __init__(self, settings: Settings):
+        self._settings = settings
         self._token = settings.vk_access_token
         self._group_id = settings.vk_group_id
 
@@ -56,7 +58,7 @@ class VkPublisher(SocialPublisher):
     async def publish(self, request: PublishRequest) -> PublishResult:
         text = request.text_for(self.platform)
 
-        async with httpx.AsyncClient(timeout=30.0) as client:
+        async with new_async_client(self._settings, timeout=30.0) as client:
             attachments = [await self._upload_photo(client, url) for url in request.media_urls]
 
             response = await client.post(

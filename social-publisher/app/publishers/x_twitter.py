@@ -1,7 +1,7 @@
-import httpx
 from oauthlib.oauth1 import Client as OAuth1Client
 
 from ..config import Settings
+from ..http_client import new_async_client
 from ..schemas import PublishRequest, PublishResult
 from .base import SocialPublisher
 
@@ -18,6 +18,7 @@ class XPublisher(SocialPublisher):
     platform = "x"
 
     def __init__(self, settings: Settings):
+        self._settings = settings
         self._configured = bool(
             settings.x_api_key and settings.x_api_secret and settings.x_access_token and settings.x_access_token_secret
         )
@@ -38,7 +39,7 @@ class XPublisher(SocialPublisher):
     async def publish(self, request: PublishRequest) -> PublishResult:
         text = request.text_for(self.platform)
 
-        async with httpx.AsyncClient(timeout=30.0) as client:
+        async with new_async_client(self._settings, timeout=30.0) as client:
             media_ids = []
             for media_url in request.media_urls:
                 media_response = await client.get(media_url)

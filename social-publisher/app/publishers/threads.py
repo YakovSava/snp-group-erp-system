@@ -1,6 +1,5 @@
-import httpx
-
 from ..config import Settings
+from ..http_client import new_async_client
 from ..schemas import PublishRequest, PublishResult
 from .base import SocialPublisher
 
@@ -14,6 +13,7 @@ class ThreadsPublisher(SocialPublisher):
     platform = "threads"
 
     def __init__(self, settings: Settings):
+        self._settings = settings
         self._user_id = settings.threads_user_id
         self._token = settings.threads_access_token
 
@@ -28,7 +28,7 @@ class ThreadsPublisher(SocialPublisher):
         else:
             data.update({"media_type": "TEXT", "text": text})
 
-        async with httpx.AsyncClient(timeout=30.0) as client:
+        async with new_async_client(self._settings, timeout=30.0) as client:
             container = await client.post(f"{GRAPH_BASE}/{self._user_id}/threads", data=data)
             container_payload = container.json()
             if container.status_code >= 400:
